@@ -1,168 +1,251 @@
-<script setup>
-
-</script>
-
 <template>
-  <main>
-    <div>
+  <div class="login-container">
+    <div class="login-card">
+      <!-- Logo with Water Splashes Inside Card -->
+      <div class="logo-wrapper">
+        <img src="../assets/images/logo.png" alt="Water Splash Left" class="logo-img" />
+      </div>
 
-    <div class="container-fluid">
-      <div class="row">
-        <!-- Carousel Section -->
-        <!-- Login Section -->
-        <div class="col-md-6 login-section">
-          <div class="login-form margin-top">
-            <div class="logo-container text-center">
-              <!-- <img src="@/assets/images/Logo.png" alt="Company Logo" class="company-logo" /> -->
-            </div>
-            <h2 class="login-title text-center mb-4">
-              <!-- <router-link :to="{ name: 'Register' }">Register </router-link> | Login -->
-            </h2>
-            <div class="underline mb-4"></div>
+      <!-- Registration/Login Toggle -->
+      <div class="toggle-buttons">
+        <span :class="{ active: isRegistering }" @click="isRegistering = true">Registration</span> |
+        <span :class="{ active: !isRegistering }" @click="isRegistering = false">Login</span>
+      </div>
 
-            <form >
-              <div
-              
-                class="alert"
-      
-                role="alert"
-              >
-              </div>
-              <div class="form-group form-floating mb-3">
-                <input
-                  type="email"
-                  class="form-control"
-                  id="floatingInput"
-                  placeholder="Enter your email"
-                  required
-                />
-                <label for="floatingInput">Email address</label>
-                <small class="form-text text-right mb-0"
-                  ><a href="#">We'll never share your email with anyone else. </a></small
-                >
-              </div>
-              <div class="form-group form-floating mb-3">
-                <input
-                  type="password"
-                  class="form-control"
-                  id="password"
-                  placeholder="Enter your password"
-                  required
-                />
-                <label for="password">Password</label>
-                <!-- <small class="form-text text-right mb-0"
-                  ><router-link to="/forget password">Forgot password? </router-link></small
-                > -->
-              </div>
-              <button
-                type="submit"
-                class="form-group btn btn-primary btn-block drag-active"
-              >
-                Login
-              </button>
-            </form>
-          </div>
+      <div v-if="isRegistering" class="registration-form">
+        <div class="input-group">
+          <i class="fa-solid fa-user input-icon"></i>
+          <input type="text" placeholder="Name" class="login-input" v-model="name" required />
         </div>
       </div>
+
+      <!-- Email Input -->
+      <div class="input-group">
+        <i class="fa-solid fa-envelope input-icon"></i>
+        <input type="text" placeholder="Email" class="login-input" v-model="email" required />
+      </div>
+      <p v-if="emailError" class="error-message">{{ emailError }}</p>
+
+      <!-- Password Input with Toggle -->
+      <div class="input-group">
+        <i class="fa-solid fa-lock input-icon"></i>
+        <input :type="showPassword ? 'text' : 'password'" placeholder="Password" class="login-input" v-model="password" required />
+        <i class="fa-solid" :class="showPassword ? 'fa-eye' : 'fa-eye-slash'" @click="togglePassword"></i>
+      </div>
+      <p v-if="passwordError" class="error-message">{{ passwordError }}</p>
+
+      <div v-if="isRegistering" class="input-group">
+        <i class="fa-solid fa-lock input-icon"></i>
+        <input :type="showPassword ? 'text' : 'password'" placeholder="Confirm Password" class="login-input" v-model="confirmPassword" required />
+        <i class="fa-solid" :class="showPassword ? 'fa-eye' : 'fa-eye-slash'" @click="togglePassword"></i>
+      </div>
+      <p v-if="confirmPasswordError" class="error-message">{{ confirmPasswordError }}</p>
+
+      <!-- Login/Register Button -->
+      <button type="submit" class="login-btn" @click="validateForm">{{ isRegistering ? 'REGISTER' : 'LOG IN' }}</button>
     </div>
   </div>
-  </main>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      showPassword: false,
+      isRegistering: false,
+      email: "",
+      password: "",
+      confirmPassword: "",
+      name: "",
+      emailError: "",
+      passwordError: "",
+      confirmPasswordError: "",
+    };
+  },
+  methods: {
+    togglePassword() {
+      this.showPassword = !this.showPassword;
+    },
+    validateForm() {
+      this.emailError = "";
+      this.passwordError = "";
+      this.confirmPasswordError = "";
+
+      // Email validation
+      if (!this.email.includes("@") || !this.email.includes(".")) {
+        this.emailError = "Please enter a valid email.";
+      }
+
+      // Password validation (at least 8 characters and one number)
+      const passwordPattern = /^(?=.*\d).{8,}$/;
+      if (!passwordPattern.test(this.password)) {
+        this.passwordError = "Password must be at least 8 characters and contain a number.";
+      }
+
+      // Confirm password validation (only for registration)
+      if (this.isRegistering && this.password !== this.confirmPassword) {
+        this.confirmPasswordError = "Passwords do not match.";
+      }
+
+      // Prevent submission if any errors exist
+      if (this.emailError || this.passwordError || this.confirmPasswordError) {
+        return;
+      }
+
+      alert(this.isRegistering ? "Registration Successful!" : "Login Successful!");
+    }
+  }
+};
+</script>
+
 <style scoped>
-/* Base styles */
-body {
-  background-color: #f5f5f5;
-  font-family: 'Poppins', sans-serif;
+/* Background */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to bottom, #b3e0ff, white);
+  position: relative;
 }
 
-.company-logo {
-  width: 250px;
-  margin-top: -60px;
+.logo-img {
+  width: 150px;
+  height: auto;
 }
 
-.login-title {
-  margin-bottom: 20px;
+/* Logo Wrapper */
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 15px;
 }
 
-.form-control {
-  border: 1px solid #ced4da;
-  width: 80%;
-  padding: 8px;
-  font-size: 17px;
+/* Toggle Buttons */
+.toggle-buttons {
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
-.form-group {
-  margin-left: 16%;
+.toggle-buttons span {
+  cursor: pointer;
+  color: #4aa3df;
 }
 
-.btn-primary {
-  background-color: #2293CD;
-  border: none;
-}
-
-.btn-primary:hover {
-  background-color: #2293CD;
-}
-
-.btn-block {
-  width: 67%;
-  margin-left: 16%;
-}
-
-.alert {
-  margin-left: 16%;
-  width: 67%;
-}
-
-.underline {
-  margin-left: 16%;
-  width: 68%;
-  border-bottom: 1px solid #ced4da;
-  margin-bottom: 20px;
-}
-
-.register-text,
-.login-title a,
-.form-text a {
-  color: #6c757d;
-  text-decoration: none;
-}
-
-.form-group.has-error .form-control {
-  border-color: red;
-}
-
-.login-title a:hover,
-.form-text a:hover {
+.toggle-buttons .active {
   text-decoration: underline;
 }
 
-.margin-top {
-  margin-top: 15%;
+/* Water Splash Images */
+.splash-img {
+  width: 50px;
+  opacity: 0.7;
+  position: absolute;
 }
 
-.drag-active:active {
-  background-color: #343a40;
-  border-color: #343a40;
-  color: #ffffff;
+.splash-img.left {
+  left: -60px;
 }
-.loading-line {
-  position: fixed;
-  top: 0;
-  left: 0;
+
+.splash-img.right {
+  right: -60px;
+}
+
+/* Login Card */
+.login-card {
+  background: white;
+  border: 3px solid #4aa3df;
+  padding: 20px;
+  border-radius: 10px;
+  width: 350px;
+  text-align: center;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Card Hover Effect */
+.login-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Input Fields */
+.input-group {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 2px solid #4aa3df;
+  border-radius: 10px;
+  margin: 8px 0;
+  padding: 8px;
+  transition: 0.3s;
+  position: relative;
+}
+
+/* Input Hover & Focus Animation */
+.input-group:hover,
+.input-group:focus-within {
+  box-shadow: 0px 0px 10px rgba(74, 163, 223, 0.5);
+  transform: scale(1.03);
+}
+
+/* Icons */
+.input-icon {
+  font-size: 16px;
+  margin-right: 8px;
+  color: #333;
+}
+
+/* Password Toggle */
+.fa-eye,
+.fa-eye-slash {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #555;
+}
+
+/* Input */
+.login-input {
+  border: none;
+  outline: none;
   width: 100%;
-  height: 6px;
-  background-color: rgba(128, 0, 225, 0.8);
-  animation: loading-bar 1s infinite;
+  background: none;
+  font-size: 14px;
+  color: #333;
 }
 
-@keyframes loading-bar {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
+/* Button */
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #4aa3df;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  box-shadow: 0px 5px 15px rgba(74, 163, 223, 0.4);
+}
+
+/* Button Hover */
+.login-btn:hover {
+  background: #2e8ac8;
+  transform: scale(1.05);
+}
+
+/* Error Messages */
+.error-message {
+  color: red;
+  font-size: 12px;
+  text-align: left;
+  margin-top: -5px;
+  margin-bottom: 5px;
 }
 </style>
