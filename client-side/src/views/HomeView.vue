@@ -46,7 +46,6 @@
     </div>
   </div>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </template>
 
 <script>
@@ -62,6 +61,8 @@ export default {
       emailError: "",
       passwordError: "",
       confirmPasswordError: "",
+      staticEmail: "test@gmail.com", // Static email
+      staticPassword: "testtest", // Static password
     };
   },
   methods: {
@@ -79,10 +80,10 @@ export default {
       }
 
       // Password validation (at least 8 characters and one number)
-      const passwordPattern = /^(?=.*\d).{8,}$/;
-      if (!passwordPattern.test(this.password)) {
-        this.passwordError = "Password must be at least 8 characters and contain a number.";
-      }
+      // const passwordPattern = /^(?=.*\d).{8,}$/;
+      // if (!passwordPattern.test(this.password)) {
+      //   this.passwordError = "Password must be at least 8 characters and contain a number.";
+      // }
 
       // Confirm password validation (only for registration)
       if (this.isRegistering && this.password !== this.confirmPassword) {
@@ -94,7 +95,17 @@ export default {
         return;
       }
 
-      alert(this.isRegistering ? "Registration Successful!" : "Login Successful!");
+      // alert(this.isRegistering ? "Registration Successful!" : "Login Successful!");
+      if (!this.isRegistering) {
+        if (this.email === this.staticEmail && this.password === this.staticPassword) {
+          alert("Login Successful!");
+          this.$router.push("/dashboard");  // Redirect to home page
+        } else {
+          this.passwordError = "Invalid email or password.";
+        }
+      } else {
+        alert("Registration Successful!");
+      }
     }
   }
 };
@@ -107,7 +118,6 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(to bottom, #b3e0ff, white);
   position: relative;
 }
 
