@@ -1,17 +1,18 @@
 <template>
   <div class="login-container">
     <div class="login-card">
-      <!-- Logo with Water Splashes Inside Card -->
+      <!-- Logo -->
       <div class="logo-wrapper">
-        <img src="../assets/images/logo.png" alt="Water Splash Left" class="logo-img" />
+        <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
       </div>
 
-      <!-- Registration/Login Toggle -->
+      <!-- Toggle between Login & Registration -->
       <div class="toggle-buttons">
         <span :class="{ active: isRegistering }" @click="isRegistering = true">Registration</span> |
         <span :class="{ active: !isRegistering }" @click="isRegistering = false">Login</span>
       </div>
 
+      <!-- Registration Form -->
       <div v-if="isRegistering" class="registration-form">
         <div class="input-group">
           <i class="fa-solid fa-user input-icon"></i>
@@ -42,10 +43,11 @@
       <p v-if="confirmPasswordError" class="error-message">{{ confirmPasswordError }}</p>
 
       <!-- Login/Register Button -->
-      <button type="submit" class="login-btn" @click="validateForm">{{ isRegistering ? 'REGISTER' : 'LOG IN' }}</button>
+      <button type="submit" class="login-btn" @click="validateForm" style="cursor: pointer;">
+        {{ isRegistering ? 'REGISTER' : 'LOG IN' }}
+      </button>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -61,8 +63,8 @@ export default {
       emailError: "",
       passwordError: "",
       confirmPasswordError: "",
-      staticEmail: "test@gmail.com", // Static email
-      staticPassword: "testtest", // Static password
+      staticEmail: "test@gmail.com",
+      staticPassword: "testtest",
     };
   },
   methods: {
@@ -74,32 +76,22 @@ export default {
       this.passwordError = "";
       this.confirmPasswordError = "";
 
-      // Email validation
       if (!this.email.includes("@") || !this.email.includes(".")) {
         this.emailError = "Please enter a valid email.";
       }
 
-      // Password validation (at least 8 characters and one number)
-      // const passwordPattern = /^(?=.*\d).{8,}$/;
-      // if (!passwordPattern.test(this.password)) {
-      //   this.passwordError = "Password must be at least 8 characters and contain a number.";
-      // }
-
-      // Confirm password validation (only for registration)
       if (this.isRegistering && this.password !== this.confirmPassword) {
         this.confirmPasswordError = "Passwords do not match.";
       }
 
-      // Prevent submission if any errors exist
       if (this.emailError || this.passwordError || this.confirmPasswordError) {
         return;
       }
 
-      // alert(this.isRegistering ? "Registration Successful!" : "Login Successful!");
       if (!this.isRegistering) {
         if (this.email === this.staticEmail && this.password === this.staticPassword) {
           alert("Login Successful!");
-          this.$router.push("/dashboard");  // Redirect to home page
+          this.$router.push("/dashboard");
         } else {
           this.passwordError = "Invalid email or password.";
         }
@@ -113,72 +105,32 @@ export default {
 
 <style scoped>
 /* Background */
+.logo-img{
+  width: 50%;
+}
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   position: relative;
-}
-
-.logo-img {
-  width: 150px;
-  height: auto;
-}
-
-/* Logo Wrapper */
-.logo-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  margin-bottom: 15px;
-}
-
-/* Toggle Buttons */
-.toggle-buttons {
-  text-align: center;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.toggle-buttons span {
-  cursor: pointer;
-  color: #4aa3df;
-}
-
-.toggle-buttons .active {
-  text-decoration: underline;
-}
-
-/* Water Splash Images */
-.splash-img {
-  width: 50px;
-  opacity: 0.7;
-  position: absolute;
-}
-
-.splash-img.left {
-  left: -60px;
-}
-
-.splash-img.right {
-  right: -60px;
+  background: linear-gradient(135deg, #ffffff, #4aa3df);
+  overflow: hidden;
 }
 
 /* Login Card */
 .login-card {
-  background: white;
-  border: 3px solid #4aa3df;
-  padding: 20px;
-  border-radius: 10px;
-  width: 350px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 30px;
+  width: 380px;
   text-align: center;
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: transform 0.3s ease-in-out;
 }
 
-/* Card Hover Effect */
 .login-card:hover {
   transform: translateY(-5px);
 }
@@ -187,36 +139,22 @@ export default {
 .input-group {
   display: flex;
   align-items: center;
-  background: white;
-  border: 2px solid #4aa3df;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
-  margin: 8px 0;
-  padding: 8px;
-  transition: 0.3s;
+  padding: 10px;
+  margin: 10px 0;
+  transition: all 0.3s ease-in-out;
   position: relative;
 }
 
-/* Input Hover & Focus Animation */
-.input-group:hover,
-.input-group:focus-within {
-  box-shadow: 0px 0px 10px rgba(74, 163, 223, 0.5);
-  transform: scale(1.03);
+.input-group:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
-/* Icons */
 .input-icon {
   font-size: 16px;
   margin-right: 8px;
-  color: #333;
-}
-
-/* Password Toggle */
-.fa-eye,
-.fa-eye-slash {
-  position: absolute;
-  right: 10px;
-  cursor: pointer;
-  color: #555;
+  color: black;
 }
 
 /* Input */
@@ -226,36 +164,27 @@ export default {
   width: 100%;
   background: none;
   font-size: 14px;
-  color: #333;
+  color: black;
+  caret-color: black;
 }
 
-/* Button */
+/* Login Button */
 .login-btn {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border-radius: 10px;
   border: none;
-  background: #4aa3df;
-  color: white;
+  background: linear-gradient(135deg, #4aa3df, #ffffff);
+  color: black;
   font-size: 16px;
   font-weight: bold;
-  cursor: pointer;
   transition: 0.3s ease-in-out;
-  box-shadow: 0px 5px 15px rgba(74, 163, 223, 0.4);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
 
-/* Button Hover */
 .login-btn:hover {
-  background: #2e8ac8;
+  background: linear-gradient(135deg, #ffffff, #4aa3df);
   transform: scale(1.05);
-}
-
-/* Error Messages */
-.error-message {
-  color: red;
-  font-size: 12px;
-  text-align: left;
-  margin-top: -5px;
-  margin-bottom: 5px;
 }
 </style>
