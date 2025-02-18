@@ -1,39 +1,5 @@
 <template>
-  <div class="d-flex">
-    <div class="sidebar">
-      <div>
-        <div class="text-center mb-4">
-          <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
-        </div>
-        <nav class="nav flex-column">
-          <router-link to="/overview" class="nav-link">
-            <i class="fas fa-chart-bar"></i> Overview
-          </router-link>
-          <div class="nav-item">
-            <button class="nav-link dropdown-btn" @click="toggleOrders">
-              <i class="fas fa-box"></i> Orders
-            </button>
-            <div v-if="showOrders" class="nested-menu">
-              <router-link to="/orders/area" class="nav-link sub-link">
-                <i class="fas fa-user"></i> Area
-              </router-link>
-              <router-link to="/orders/client" class="nav-link sub-link">
-                <i class="fas fa-users"></i> Client
-              </router-link>
-            </div>
-          </div>
-          <router-link to="/status" class="nav-link">
-            <i class="fas fa-info-circle"></i> Status
-          </router-link>
-        </nav>
-      </div>
-      <div class="logout-container">
-        <router-link to="/logout" class="logout-link">
-          <i class="fas fa-sign-out-alt"></i> Log Out
-        </router-link>
-      </div>
-    </div>
-    
+  
     <div class="content-container flex-grow-1 d-flex flex-column justify-content-center align-items-center">
       <!-- Landing image container with combined zoom, tilt, and pulse animation -->
       <div class="landing-page">
@@ -51,12 +17,7 @@
           <div class="bubble bubble6"></div>
         </div>
       </div>
-      
-      <div class="content p-4 w-100">
-        <router-view></router-view>
-      </div>
-    </div>
-  </div>
+    </div>      
 </template>
 
 <script>
