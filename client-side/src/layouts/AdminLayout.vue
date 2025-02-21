@@ -1,10 +1,10 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex bg">
     <Sidebar />
     <div
       class="content-container flex-grow-1 d-flex flex-column justify-content-center align-items-center"
     >
-      <div class="content p-4 w-100">
+      <div class="content p-4 w-100 ">
         <router-view></router-view>
       </div>
     </div>
@@ -36,6 +36,9 @@ export default {
 </script>
   
 <style scoped>
+.bg {
+  background-color: #f5f5f5;
+}
 .sidebar {
   width: 270px;
   height: 100vh;
