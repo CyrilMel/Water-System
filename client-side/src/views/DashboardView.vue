@@ -1,5 +1,4 @@
 <template>
-  
     <div class="content-container flex-grow-1 d-flex flex-column justify-content-center align-items-center">
       <!-- Landing image container with combined zoom, tilt, and pulse animation -->
       <div class="landing-page">
@@ -29,6 +28,7 @@ export default {
       sidebarVisible: true,
     };
   },
+
   methods: {
     toggleOrders() {
       this.showOrders = !this.showOrders;

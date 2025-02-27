@@ -1,76 +1,31 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <!-- Row 1, Card 1 -->
-      <div class="col-md-3">
-        <div class="card">
-          <img
-            src="../assets/images/test-data-image.png"
-            class="card-img-top"
-            alt="..."
-          />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">
-              This is a wider card with supporting text below as a natural
-              lead-in to additional content. This content is a little bit
-              longer.
-            </p>
-          </div>
+  <div ref="advertisementSection" class="advertisement-section" :class="{ 'fade-in': isVisible }">
+    <div class="advertisement-text">
+      <h1><span class="blue-text">Stay Hydrated,</span> <span class="black-text">Live Better</span></h1>
+      <p>Discover the purity and convenience of premium water solutions for a healthier lifestyle.</p>
+    </div>
+    
+    <div class="cards-container">
+      <div v-for="(card, index) in cards" :key="index" 
+        class="card" 
+        :class="{ 'fade-in': isVisible }"
+        @click="openModal(index)">
+        <div class="image-container">
+          <img :src="card.image" :alt="card.title" class="card-image" />
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">{{ card.title }} &rsaquo;</h3>
+          <p class="card-description">{{ card.description }}</p>
         </div>
       </div>
-      <!-- Row 2, Card 2 -->
-      <div class="col-md-3">
-        <div class="card">
-          <img
-            src="../assets/images/2test-data-image.png"
-            class="card-img-top"
-            alt="..."
-          />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">
-              This is a wider card with supporting text below as a natural
-              lead-in to additional content. This content is a little bit
-              longer.
-            </p>
-          </div>
-        </div>
-      </div>
-      <!-- Row 3, Card 3 -->
-      <div class="col-md-3">
-        <div class="card">
-          <img
-            src="../assets/images/3test-data-image.png"
-            class="card-img-top"
-            alt="..."
-          />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">
-              This is a wider card with supporting text below as a natural
-              lead-in to additional content. This content is a little bit
-              longer.
-            </p>
-          </div>
-        </div>
-      </div>
-      <!-- Row 4, Card 4 -->
-      <div class="col-md-3">
-        <div class="card">
-          <img
-            src="../assets/images/test-data-image4.png"
-            class="card-img-top"
-            alt="..."
-          />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">
-              This is a wider card with supporting text below as a natural
-              lead-in to additional content. This content is a little bit
-              longer.
-            </p>
-          </div>
+      
+      <!-- Modal -->
+      <div v-if="showModal" class="modal-overlay" @click="closeModal">
+        <div class="modal-content shadow-lg" @click.stop>
+          <img :src="selectedCard.image" alt="Modal Image" class="modal-image" />
+          <h2>{{ selectedCard.title }}</h2>
+          <p>{{ selectedCard.fullDescription }}</p>
+          <button class="close-btn" @click="closeModal">Close</button>
         </div>
       </div>
     </div>
@@ -78,37 +33,177 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      cards: [
+        { title: "Know Your Water", description: "Primo Water goes through a rigorous purification process...", fullDescription: "Detailed explanation about how Primo Water is purified and its benefits.", image: "https://placehold.co/1080x1000/png" },
+        { title: "Get Your Water", description: "Enjoy convenient access to high-quality water...", fullDescription: "Details about easy access and delivery options for water.", image: "https://placehold.co/1080x1000/png" },
+        { title: "Choose Responsible Water", description: "By choosing reusable bottles, you’re not just hydrating...", fullDescription: "Information on sustainability and reducing plastic waste.", image: "https://placehold.co/1080x1000/png" }
+      ],
+      showModal: false,
+      selectedCard: {},
+      isVisible: false
+    };
+  },
+  methods: {
+    openModal(index) {
+      this.selectedCard = this.cards[index];
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
+    handleScroll() {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            this.isVisible = true;
+            observer.disconnect(); // Stop observing once visible
+          }
+        },
+        { threshold: 0.3 }
+      );
+      observer.observe(this.$refs.advertisementSection);
+    }
+  },
+  mounted() {
+    this.handleScroll();
+  }
+};
 </script>
 
 <style scoped>
-/* Card styles */
-.card-group {
-  display: flex;
-  flex-wrap: wrap;
+/* Section Styling */
+.advertisement-section {
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 60px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
+/* Make it visible when scrolled */
+.fade-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Text Styling */
+.advertisement-text h1 {
+  font-size: 2rem;
+  font-weight: 800;
+}
+.advertisement-text p {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.blue-text { color: #007BFF; }
+.black-text { color: #000; }
+
+/* Cards Container */
+.cards-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 5%;
+}
+
+/* Card Styling */
 .card {
-  flex: 1 1 30%; /* Adjust the width of the cards */
-  margin: 10px; /* Add some margin between cards */
+  width: 400px;
+  background: #E3F2FD;
+  border-radius: 15px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.card.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card:hover { transform: translateY(-5px); }
+
+.image-container {
+  overflow: hidden;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.card-image {
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover .card-image {
+  transform: scale(1.1);
+}
+
+.card-content {
+  padding: 20px;
+}
+
+.card-title {
+  color: #007BFF;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.card-description {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10%;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 500px;
+  height: 500px;
+  text-align: center;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
-.card-img-top {
-  height: 300px; /* Set a fixed height for the images */
-  object-fit: contain; /* Ensure the image covers the area without distorting */
-  background: linear-gradient(to bottom, #b3e0ff, white);
+.modal-image {
+  width: 40%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 15px;
 }
 
-.card-body {
-  flex: 1; /* Ensure the card body takes up the remaining space */
+.close-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: #ff0000;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .card {
-    flex: 1 1 100%; /* Make cards full width on smaller screens */
-  }
+.close-btn:hover {
+  background: #b30000;
 }
 </style>
