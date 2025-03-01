@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue'),
     },
     {
+      path: '/checkout/cart',
+      name: 'cart',
+      component: () => import('../views/CartProductView.vue'),
+    },
+    {
       path: '/dashboard',
       name: 'dashboard',
       // route level code-splitting
@@ -32,6 +37,11 @@ const router = createRouter({
           name: 'order',
           component: () => import('../views/OrdersView.vue'),
         },
+        {
+          path: '/status',
+          name: 'status',
+          component: () => import('../views/StatusOrderView.vue')
+        }
       ],
     },
    

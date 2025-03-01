@@ -6,7 +6,7 @@
       </router-link>
     </div>
     <div class="top-right-cart">
-        <router-link to="/login" class="account-btn">
+        <router-link :to="{ name: 'cart' }" class="account-btn">
         <i class="fas fa-shopping-cart"></i> Cart
       </router-link>
       </div>
@@ -15,13 +15,14 @@
       <div class="logo">
         <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
       </div>
+      <slot name="modalNavLink">
       <ul class="nav-links">
-        <li><a href="#">Home</a></li>
+        <li><router-link to="/">Home</router-link></li>
         <li><a href="#">About</a></li>
         <li><a href="#">Contact Us</a></li>
         <li><a href="#">Get Water Delivery</a></li>
-      </ul>
-   
+      </ul> 
+      </slot>
     </div>
   </nav>
 </template>
