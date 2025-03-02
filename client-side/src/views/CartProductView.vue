@@ -1,44 +1,88 @@
 <template>
-  <Navbar class="bg" > 
+  <Navbar class="bg">
     <template v-slot:modalNavLink>
-           <div class="cart-wrapper">
-            Your Cart (0)
-           </div> 
+      <div class="cart-wrapper">Your Cart ({{ quantity }})</div>
     </template>
   </Navbar>
   <div class="container py-5 mt-5">
     <div class="row justify-content-center">
       <div class="col-12 col-md-5 mb-3">
-        <router-link to="/" class="text-primary">&lt; Continue Shopping</router-link>
-        <h4 class="mt-4">Recurring Purchases</h4>
+        <router-link to="/" class="text-primary">&lt; Homepage</router-link>
+        <h4 class="mt-4">Purchases</h4>
         <div class="card p-3 shadow-sm">
           <div class="d-flex align-items-center">
-            <img src="../assets/images/test-data-image.png" style="width: 70px;"  alt="Product Image" class="me-3" />
+            <img src="../assets/images/test-data-image.png" style="width: 70px;" alt="Product Image" class="me-3" />
             <div class="flex-grow-1">
-              <h5>Primo® Purified Bottled Water</h5>
-              <p class="mb-5">5 Gallon Bottled Water, 1 Bottle</p>
+              <h5>Mineral Water</h5>
+              <p class="mb-3">Mineral Water Type 1</p>
               <div class="d-flex align-items-center">
-              <span class="me-2">QTY</span>
-              <button class="btn btn-primary" @click="decreaseQty">-</button>
-              <input type="text" class="form-control text-center mx-2" v-model="quantity" style="width: 50px;" disabled>
-              <button class="btn btn-primary" @click="increaseQty">+</button>
-              <button class="btn text-primary">Remove</button>
+                <span class="me-2">QTY</span>
+                <button class="btn btn-primary" @click="decreaseQty">-</button>
+                <input type="text" class="form-control text-center mx-2" v-model="quantity" style="width: 50px;" disabled>
+                <button class="btn btn-primary" @click="increaseQty">+</button>
+                <button class="btn text-danger ms-3" @click="removeItem">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+              <div class="mt-3">
+                <label class="form-check-label">
+                  <input type="radio" v-model="gallonType" value="refill" class="form-check-input"> Refill (₱40)
+                </label>
+                <label class="form-check-label ms-3">
+                  <input type="radio" v-model="gallonType" value="new" class="form-check-input"> New Gallon (+₱40)
+                </label>
               </div>
             </div>
-            <p class="fw-bold text-center text-md-start">$7.99</p>
+            <p class="fw-bold text-center text-md-start">₱{{ gallonCost }}</p>
           </div>
         </div>
       </div>
       <div class="col-md-5">
         <h4 class="mb-4">Order Summary</h4>
-        <h5>First Delivery Charges</h5>
-        <p>Estimated Subtotal: <span class="float-end">$7.99</span></p>
-        <p>Refundable Bottle Deposit: <span class="float-end">$7.00</span></p>
-        <p>Taxes & Fees: <span class="float-end">$0.30</span></p>
+        <h5>Initial Delivery Charges</h5>
+        <p>Subtotal: <span class="float-end">₱{{ subtotal }}</span></p>
+        <p>Delivery Fee: <span class="float-end">₱10.00</span></p>
+        <p v-if="gallonType === 'new'">Gallon Type: <span class="float-end">New Gallon (₱40)</span></p>
         <hr>
-        <p class="fw-bold">Estimated Total: <span class="float-end">$15.29</span></p>
-        <button class="btn btn-primary w-100">Proceed to Checkout</button>
-        <p class="mt-2 text-muted small">* You are signing up for a recurring subscription...</p>
+        <p class="fw-bold">Total Amount: <span class="float-end">₱{{ totalCost }}</span></p>
+        <button class="btn btn-primary w-100" @click="showModal = true">Proceed to Checkout</button>
+        <p class="mt-2 text-muted small">* By proceeding, you agree to a scheduled subscription with convenient delivery options.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div v-if="showModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+      </div>
+      <div class="modal-body d-flex">
+        <div class="col-md-6 p-3">
+          <h5>Order Details</h5>
+          <div class="d-flex align-items-center">
+            <img src="../assets/images/test-data-image.png" style="width: 70px;" alt="Product Image" class="me-3" />
+            <div>
+              <p>Mineral Water - {{ quantity }}x</p>
+              <p v-if="gallonType === 'new'">Gallon Type: New Gallon (+₱40)</p>
+            </div>
+          </div>
+          <h5 class="mt-4">Fill Up Information</h5>
+          <input type="text" class="form-control mb-2" placeholder="Full Name" v-model="name">
+          <input type="text" class="form-control mb-2" placeholder="Address" v-model="address">
+          <input type="text" class="form-control mb-2" placeholder="Phone Number" v-model="phone">
+        </div>
+        <div class="col-md-6 p-3">
+          <h5>Order Summary</h5>
+          <p>Subtotal: <span class="float-end">₱{{ subtotal }}</span></p>
+          <p>Delivery Fee: <span class="float-end">₱10.00</span></p>
+          <p v-if="gallonType === 'new'">Gallon Type: <span class="float-end">New Gallon (₱40)</span></p>
+          <hr>
+          <p class="fw-bold">Total Amount: <span class="float-end">₱{{ totalCost }}</span></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" @click="showModal = false">Close</button>
+        <button type="button" class="btn btn-primary">Submit Order</button>
       </div>
     </div>
   </div>
@@ -46,15 +90,30 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue';
-
 export default {
- components : {
+  components: {
     Navbar
- },
- data() {
+  },
+  data() {
     return {
       quantity: 1,
+      gallonType: 'refill',
+      name: '',
+      address: '',
+      phone: '',
+      showModal: false
     };
+  },
+  computed: {
+    gallonCost() {
+      return this.gallonType === 'refill' ? 40 : 80;
+    },
+    subtotal() {
+      return (this.quantity * this.gallonCost).toFixed(2);
+    },
+    totalCost() {
+      return (parseFloat(this.subtotal) + 10).toFixed(2);
+    }
   },
   methods: {
     increaseQty() {
@@ -63,12 +122,18 @@ export default {
     decreaseQty() {
       if (this.quantity > 1) this.quantity--;
     },
-  },
-}
+    removeItem() {
+      this.quantity = 0;
+    }
+  }
+};
 </script>
 
 <style scoped>
-.bg{
+.modal-footer{
+gap: 5px;
+}
+.bg {
   background: linear-gradient(135deg, #ffffff, #4aa3df);
   opacity: 85%;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
@@ -77,14 +142,33 @@ export default {
   font-size: 1.5rem;
   font-weight: 600;
   color: #151515;
-  padding: 10px 20px; 
+  padding: 10px 20px;
   border-radius: 5px;
-  position: absolute;   /* Absolutely position the cart */
-  left: 50%;            /* Position it in the middle horizontally */
-  transform: translateX(-50%);  /* Offset it back by half its width to truly center it */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
-.card {
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background: white;
+  padding: 20px;
   border-radius: 10px;
+  width: 80%;
 }
-
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
 </style>

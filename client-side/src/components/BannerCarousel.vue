@@ -10,28 +10,32 @@
           Refreshing, pure, and essential—water keeps you energized and feeling your best every day!<br>
         </p>
         <div class="buttons">
-          <button class="btn primary">Start Water Delivery</button>
-          <button class="btn secondary">Our Services</button>
+          <button class="btn primary" @click="scrollTo('delivery', 100)">Start Water Delivery</button>
+          <button class="btn secondary" @click="scrollTo('about', 100)">Our Services</button>
         </div>
       </div>
       <video autoplay loop muted playsinline>
         <source src="../assets/videos/banner.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
-        
-    </div>
-    <div class="content">
-      <productCard />
     </div>
   </div>
 </template>
 
 <script>
-import productCard from './productCard.vue';
-
 export default {
-  components: {
-    productCard
+  methods: {
+    scrollTo(section, offset) {
+      this.$nextTick(() => {
+        const target = document.getElementById(section);
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - offset,
+            behavior: "smooth",
+          });
+        }
+      });
+    },
   },
 };
 </script>
@@ -54,9 +58,10 @@ export default {
   text-align: left;
   color: #ffffff;
   font-family: 'Poppins', sans-serif;
-  z-index: 2; /* Ensure it's above the video */
-  pointer-events: auto; /* Allow interactions */
+  z-index: 2;
+  pointer-events: auto;
 }
+
 .video-container video {
   position: absolute;
   top: 0;
@@ -64,11 +69,12 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 1; /* Ensure video stays behind overlay */
-  pointer-events: none; /* Prevent the video from blocking interactions */
+  z-index: 1;
+  pointer-events: none;
 }
+
 h1 {
-  font-size: 4.5rem; /* Bigger and more elegant */
+  font-size: 4.5rem;
   font-weight: bold;
   text-transform: capitalize;
   letter-spacing: 1px;
@@ -86,7 +92,7 @@ h2 {
 }
 
 .highlight {
-  color: #1E73BE; /* Eye-catching blue */
+  color: #1E73BE;
   font-weight: bold;
 }
 
@@ -98,12 +104,7 @@ p {
   max-width: 450px;
 }
 
-.bold {
-  font-weight: bold;
-}
-
 .buttons {
-  
   margin-top: 20px;
   display: flex;
   gap: 15px;
@@ -122,7 +123,6 @@ p {
 }
 
 .primary {
-
   background-color: #007BFF;
   color: #ffffff;
   box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.4);
@@ -149,7 +149,6 @@ p {
   transform: scale(1.1);
 }
 
-/* Keyframe Animations */
 @keyframes fadeInLeft {
   to {
     opacity: 1;
@@ -178,14 +177,6 @@ video {
   object-fit: cover;
 }
 
-.content {
-  position: relative;
-  z-index: 1;
-  background: white;
-  padding: 2rem 0;
-}
-
-/* Mobile Adjustments */
 @media (max-width: 768px) {
   .overlay {
     bottom: 15%;

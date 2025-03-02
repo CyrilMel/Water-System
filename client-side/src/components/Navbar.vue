@@ -6,22 +6,22 @@
       </router-link>
     </div>
     <div class="top-right-cart">
-        <router-link :to="{ name: 'cart' }" class="account-btn">
+      <router-link :to="{ name: 'cart' }" class="account-btn">
         <i class="fas fa-shopping-cart"></i> Cart
       </router-link>
-      </div>
-
+    </div>
+    
     <div class="nav-content">
       <div class="logo">
         <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
       </div>
       <slot name="modalNavLink">
-      <ul class="nav-links">
-        <li><router-link to="/">Home</router-link></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact Us</a></li>
-        <li><a href="#">Get Water Delivery</a></li>
-      </ul> 
+        <ul class="nav-links">
+          <li><a href="#home" @click.prevent="scrollTo('home', 0)">Home</a></li>
+          <li><a href="#about" @click.prevent="scrollTo('about', 100)">About</a></li>
+          <li><a href="#contact" @click.prevent="scrollTo('contact', 10)">Contact Us</a></li>
+          <li><a href="#delivery" @click.prevent="scrollTo('delivery', 100)">Get Water Delivery</a></li>
+        </ul> 
       </slot>
     </div>
   </nav>
@@ -42,10 +42,20 @@ export default {
     handleScroll() {
       this.isScrolled = window.scrollY > 50;
     },
+    scrollTo(section, offset) {
+      this.$nextTick(() => {
+        const target = document.getElementById(section);
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - offset,
+            behavior: "smooth",
+          });
+        }
+      });
+    },
   },
 };
 </script>
-
 <style scoped>
 .navbar {
   position: fixed;

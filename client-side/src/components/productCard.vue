@@ -1,8 +1,8 @@
 <template>
   <div ref="advertisementSection" class="advertisement-section" :class="{ 'fade-in': isVisible }">
     <div class="advertisement-text">
-      <h1><span class="blue-text">Stay Hydrated,</span> <span class="black-text">Live Better</span></h1>
-      <p>Discover the purity and convenience of premium water solutions for a healthier lifestyle.</p>
+      <h1><span class="blue-text">Pure Mineral Water,</span> <span class="black-text">Healthy Living</span></h1>
+      <p>Experience the benefits of natural mineral water, sourced and purified for your well-being.</p>
     </div>
     
     <div class="cards-container">
@@ -11,7 +11,7 @@
         :class="{ 'fade-in': isVisible }"
         @click="openModal(index)">
         <div class="image-container">
-          <img :src="card.image" :alt="card.title" class="card-image" />
+          <img src="../assets/images/test-data-image.png" alt="Mineral Water" class="card-image" />
         </div>
         <div class="card-content">
           <h3 class="card-title">{{ card.title }} &rsaquo;</h3>
@@ -22,7 +22,7 @@
       <!-- Modal -->
       <div v-if="showModal" class="modal-overlay" @click="closeModal">
         <div class="modal-content shadow-lg" @click.stop>
-          <img :src="selectedCard.image" alt="Modal Image" class="modal-image" />
+          <img src="../assets/images/test-data-image4.png" alt="Mineral Water" class="modal-image" />
           <h2>{{ selectedCard.title }}</h2>
           <p>{{ selectedCard.fullDescription }}</p>
           <button class="close-btn" @click="closeModal">Close</button>
@@ -37,9 +37,9 @@ export default {
   data() {
     return {
       cards: [
-        { title: "Know Your Water", description: "Primo Water goes through a rigorous purification process...", fullDescription: "Detailed explanation about how Primo Water is purified and its benefits.", image: "https://placehold.co/1080x1000/png" },
-        { title: "Get Your Water", description: "Enjoy convenient access to high-quality water...", fullDescription: "Details about easy access and delivery options for water.", image: "https://placehold.co/1080x1000/png" },
-        { title: "Choose Responsible Water", description: "By choosing reusable bottles, you’re not just hydrating...", fullDescription: "Information on sustainability and reducing plastic waste.", image: "https://placehold.co/1080x1000/png" }
+        { title: "Why Choose Mineral Water?", description: "Mineral water is naturally enriched with essential minerals...", fullDescription: "Mineral water provides hydration while supplying vital nutrients like calcium and magnesium for a healthier body." },
+        { title: "Our Purification Process", description: "Ensuring every drop meets the highest standards...", fullDescription: "Our advanced filtration process retains beneficial minerals while removing impurities, delivering the purest water possible." },
+        { title: "Sustainability Matters", description: "Supporting a healthier planet with eco-friendly practices...", fullDescription: "Our commitment to sustainability includes responsible sourcing and environmentally friendly packaging solutions." }
       ],
       showModal: false,
       selectedCard: {},

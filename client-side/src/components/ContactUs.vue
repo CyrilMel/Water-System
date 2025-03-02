@@ -26,7 +26,7 @@
                   <p>123 Water St, Pateros</p>
               </div>
           </div>
-        <a href="https://gmail.com"> <button class="contact-button">Email Us</button></a> 
+        <a href="https://mail.google.com/mail/u/0/#inbox?compose=CllgCJvpbJbBNczKCSLmdwlCKQVCWGZzRRDzFJnmLqBrgWlvQhxssZWJzmKJLCCwPKGbbmcTGkg" target="_blank" rel="noopener noreferrer"> <button class="contact-button">Email Us</button></a> 
       </div>
   </section>
 </template>
