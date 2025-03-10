@@ -1,103 +1,170 @@
 <template>
-   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div
-      class="container-fluid d-flex justify-content-between align-items-center"
-    >
-      <!-- Brand/Logo with flexible margin -->
-      <router-link
-        class="navbar-brand"
-        to="/"
-        style="margin-left: auto; margin-right: auto"
-      >
-        <img src="../assets/images/logo.png" alt="Logo" class="navbar-logo" />
+  <nav :class="{ 'scrolled': isScrolled }" class="navbar">
+    <div class="top-right-account">
+      <router-link to="/login" class="account-btn">
+        <i class="fas fa-user"></i> Account
       </router-link>
-
-      <!-- Toggle Button for Mobile -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- Navbar Links with right margin -->
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="margin-right: 200px">
-          <li class="nav-item">
-            <router-link class="nav-link" to="/home">Home</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/about">About</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/products">Products</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/delivery">Delivery</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/contacts">Contacts</router-link>
-          </li>
-        </ul>
+    </div>
+    <div class="top-right-cart">
+      <router-link :to="{ name: 'cart' }" class="account-btn">
+        <i class="fas fa-shopping-cart"></i> Cart
+      </router-link>
+    </div>
+    
+    <div class="nav-content">
+      <div class="logo">
+        <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
       </div>
+      <slot name="modalNavLink">
+        <ul class="nav-links">
+          <li><a href="#home" @click.prevent="scrollTo('home', 0)">Home</a></li>
+          <li><a href="#about" @click.prevent="scrollTo('about', 100)">About</a></li>
+          <li><a href="#contact" @click.prevent="scrollTo('contact', 10)">Contact Us</a></li>
+          <li><a href="#delivery" @click.prevent="scrollTo('delivery', 100)">Get Water Delivery</a></li>
+        </ul> 
+      </slot>
     </div>
   </nav>
 </template>
 
 <script>
 export default {
-
-}
+  data() {
+    return { isScrolled: false };
+  },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
+  },
+  methods: {
+    handleScroll() {
+      this.isScrolled = window.scrollY > 50;
+    },
+    scrollTo(section, offset) {
+      this.$nextTick(() => {
+        const target = document.getElementById(section);
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - offset,
+            behavior: "smooth",
+          });
+        }
+      });
+    },
+  },
+};
 </script>
-
 <style scoped>
 .navbar {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 30px 5px;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
+.top-right-account {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+}
+.top-right-cart{
+  position: absolute;
+  right: 100px;
+  top: 5px;
 
-.navbar-brand {
+
+}
+.account-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
   display: flex;
   align-items: center;
-  justify-content: center; /* Centers the logo */
-  flex-grow: 1; /* Allow the logo container to grow and take space */
+  gap: 5px;
+  font-family: 'Poppins', sans-serif;
+}
+.account-btn:hover {
+  color: blue;
+  font-weight: 300;
+}
+.nav-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: space-between;
+}
+.logo-img {
+  height: 60px;
+}
+.nav-links {
+  margin-top: 20px;
+  margin-left: 40%;
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  font-weight: 700;
+}
+.nav-links li a {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+  transition: color 0.3s, font-weight 0.3s;
+  font-family: 'Poppins', sans-serif;
+}
+.nav-links li a:hover {
+  color: blue;
+  font-weight: 700;
+}
+.delivery-btn {
+  background: blue;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+.delivery-btn:hover {
+  background: darkblue;
 }
 
-.navbar-logo {
-  height: 40px; /* Adjust logo size */
-  margin-right: 10px;
+/* Transparent when on top */
+.navbar {
+  background: transparent;
+  color: black;
 }
-
-.nav-link {
-  color: #4aa3df !important; /* Blue text color */
+/* Change to white with shadow on scroll */
+.navbar.scrolled {
+  background: linear-gradient(135deg, #ffffff, #4aa3df);
+  opacity: 85%;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
 }
-
-.btn-outline-primary {
-  color: #4aa3df; /* Blue text color */
+.navbar.scrolled .nav-links li a {
+  color: white;
 }
-
-.btn-outline-primary:hover {
-  background-color: #4aa3df; /* Blue background on hover */
-  color: white; /* White text on hover */
+.navbar.scrolled .account-btn {
+  color: white;
 }
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .navbar-brand {
-    margin-left: 0; /* Remove left margin for smaller screens */
-    margin-right: 400px; /* Remove right margin for smaller screens */
-    justify-content: center; /* Center logo in smaller screens */
-  }
-
-  .navbar-nav {
-    margin-right: 200px; /* Reduced margin on smaller screens */
-  }
-
-  .navbar-logo {
-    height: 30px; /* Reduce logo size on smaller screens */
-  }
-}
+.navbar.scrolled .nav-links li a:hover{
+  color: blue;
+  font-weight: 700;
+} 
+.navbar.scrolled .account-btn:hover{
+  color: blue;
+  font-weight: 300;
+} 
 </style>
