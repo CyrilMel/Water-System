@@ -25,6 +25,11 @@ const router = createRouter({
       component: () => import('../views/UserOrder.vue'),
     },
     {
+      path: '/finalcheckout',
+      name: 'finalcheckout',
+      component: () => import('../views/Checkout.vue'),
+    },
+    {
       path: '/overview',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
