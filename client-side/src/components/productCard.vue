@@ -5,7 +5,7 @@
       <p>Experience the benefits of natural mineral water, sourced and purified for your well-being.</p>
     </div>
     
-    <div class="cards-container">
+    <div class="cards-container m-5">
       <div v-for="(card, index) in cards" :key="index" 
         class="card" 
         :class="{ 'fade-in': isVisible }"

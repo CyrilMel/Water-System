@@ -25,8 +25,11 @@
                   <h3>Visit Us</h3>
                   <p>123 Water St, Pateros</p>
               </div>
+              
           </div>
+          
         <a href="https://mail.google.com/mail/u/0/#inbox?compose=CllgCJvpbJbBNczKCSLmdwlCKQVCWGZzRRDzFJnmLqBrgWlvQhxssZWJzmKJLCCwPKGbbmcTGkg" target="_blank" rel="noopener noreferrer"> <button class="contact-button">Email Us</button></a> 
+        
       </div>
   </section>
 </template>
@@ -49,6 +52,7 @@ export default {
 </script>
 
 <style scoped>
+
 .contact-section {
   position: relative;
   width: 100%;

@@ -10,7 +10,7 @@
           Refreshing, pure, and essential—water keeps you energized and feeling your best every day!<br>
         </p>
         <div class="buttons">
-          <button class="btn primary" @click="scrollTo('delivery', 100)">Start Water Delivery</button>
+          <button class="btn primary" @click="scrollTo('delivery', 100)">Order Now</button>
           <button class="btn secondary" @click="scrollTo('about', 100)">Our Services</button>
         </div>
       </div>
