@@ -15,7 +15,7 @@
       <MineralDelivery />
     </div>
     <div class="iframe-container">
-     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7471.957251572294!2d121.06718689357909!3d14.560025899999987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c87f24b30353%3A0xe23c5dcee145d66f!2sPasig%20Catholic%20College%20(Main%20Campus)!5e1!3m2!1sen!2sph!4v1741572153303!5m2!1sen!2sph" width="900" height="450"  loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7471.957251572294!2d121.06718689357909!3d14.560025899999987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c87f24b30353%3A0xe23c5dcee145d66f!2sPasig%20Catholic%20College%20(Main%20Campus)!5e1!3m2!1sen!2sph!4v1741572153303!5m2!1sen!2sph" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
     <div id="contact">
       <ContactUs />
@@ -47,16 +47,30 @@ export default {
 </script>
 <style>
   .iframe-container {
-    display: inline-block;
-    box-shadow: 10px 15px 10px rgba(0, 0, 0, 0.5); 
-    border-radius: 10px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden; 
-    margin-left: 18.5%;
+    margin: 20px auto;
+    max-width: 90%;
   }
 
   .iframe-container iframe {
-    display: block;
+    width: 100%;
+    max-width: 900px;
+    height: 450px;
     border: none;
   }
 
+  @media (max-width: 768px) {
+    .iframe-container iframe {
+      height: 300px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .iframe-container iframe {
+      height: 250px;
+    }
+  }
 </style>
