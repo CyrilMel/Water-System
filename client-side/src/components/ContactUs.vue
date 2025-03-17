@@ -25,11 +25,11 @@
                   <h3>Visit Us</h3>
                   <p>123 Water St, Pateros</p>
               </div>
-              
           </div>
-          
-        <a href="https://mail.google.com/mail/u/0/#inbox?compose=CllgCJvpbJbBNczKCSLmdwlCKQVCWGZzRRDzFJnmLqBrgWlvQhxssZWJzmKJLCCwPKGbbmcTGkg" target="_blank" rel="noopener noreferrer"> <button class="contact-button">Email Us</button></a> 
         
+        <a href="https://mail.google.com/mail/u/0/#inbox?compose=CllgCJvpbJbBNczKCSLmdwlCKQVCWGZzRRDzFJnmLqBrgWlvQhxssZWJzmKJLCCwPKGbbmcTGkg" target="_blank" rel="noopener noreferrer"> 
+          <button class="contact-button">Email Us</button>
+        </a> 
       </div>
   </section>
 </template>
@@ -52,17 +52,19 @@ export default {
 </script>
 
 <style scoped>
-
 .contact-section {
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   opacity: 0;
   transform: translateY(50px);
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  padding: 20px;
+  text-align: center;
 }
 
 .contact-section.visible {
@@ -111,6 +113,7 @@ export default {
 
 .contact-cards {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
 }
@@ -151,11 +154,25 @@ export default {
   transition: all 0.3s ease-in-out;
   cursor: pointer;
   font-weight: 1000;
-
 }
 
 .contact-button:hover {
   background: white;
   color: #004cff;
+}
+
+@media (max-width: 768px) {
+  .contact-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .contact-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .contact-card {
+    width: 90%;
+  }
 }
 </style>

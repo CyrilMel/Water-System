@@ -45,47 +45,13 @@
         <p v-if="gallonType === 'new'">Gallon Type: <span class="float-end">New Gallon (₱40)</span></p>
         <hr>
         <p class="fw-bold">Total Amount: <span class="float-end">₱{{ totalCost }}</span></p>
-        <button class="btn btn-primary w-100" @click="showModal = true">Proceed to Checkout</button>
+       <router-link to="/finalcheckout"><button class="btn btn-primary w-100" @click="showModal = true">Proceed to Checkout</button></router-link> 
         <p class="mt-2 text-muted small">* By proceeding, you agree to a scheduled subscription with convenient delivery options.</p>
       </div>
     </div>
   </div>
 
-  <!-- Checkout Modal -->
-  <div v-if="showModal" class="modal-overlay">
-    <div class="modal-content">
-      <div class="modal-header">
-      </div>
-      <div class="modal-body d-flex">
-        <div class="col-md-6 p-3">
-          <h5>Order Details</h5>
-          <div class="d-flex align-items-center">
-            <img src="../assets/images/test-data-image.png" style="width: 70px;" alt="Product Image" class="me-3" />
-            <div>
-              <p>Mineral Water - {{ quantity }}x</p>
-              <p v-if="gallonType === 'new'">Gallon Type: New Gallon (+₱40)</p>
-            </div>
-          </div>
-          <h5 class="mt-4">Fill Up Information</h5>
-          <input type="text" class="form-control mb-2" placeholder="Full Name" v-model="name">
-          <input type="text" class="form-control mb-2" placeholder="Address" v-model="address">
-          <input type="text" class="form-control mb-2" placeholder="Phone Number" v-model="phone">
-        </div>
-        <div class="col-md-6 p-3">
-          <h5>Order Summary</h5>
-          <p>Subtotal: <span class="float-end">₱{{ subtotal }}</span></p>
-          <p>Delivery Fee: <span class="float-end">₱10.00</span></p>
-          <p v-if="gallonType === 'new'">Gallon Type: <span class="float-end">New Gallon (₱40)</span></p>
-          <hr>
-          <p class="fw-bold">Total Amount: <span class="float-end">₱{{ totalCost }}</span></p>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" @click="showModal = false">Close</button>
-        <button type="button" class="btn btn-primary">Submit Order</button>
-      </div>
-    </div>
-  </div>
+ 
 </template>
 
 <script>

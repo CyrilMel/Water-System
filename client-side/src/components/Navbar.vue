@@ -1,27 +1,33 @@
 <template>
   <nav :class="{ 'scrolled': isScrolled }" class="navbar">
-    <div class="top-right-account">
-      <router-link to="/login" class="account-btn">
+    <div class="top-right">
+      <router-link to="/myaccount" class="account-btn">
         <i class="fas fa-user"></i> Account
       </router-link>
-    </div>
-    <div class="top-right-cart">
       <router-link :to="{ name: 'cart' }" class="account-btn">
         <i class="fas fa-shopping-cart"></i> Cart
       </router-link>
     </div>
     
-    <div class="nav-content">
+    <div class="nav-content mt-3">
       <div class="logo">
         <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
       </div>
+      <button class="menu-toggle" @click="toggleMenu">
+        <i class="fas fa-bars"></i>
+      </button>
       <slot name="modalNavLink">
-        <ul class="nav-links">
-          <li><a href="#home" @click.prevent="scrollTo('home', 0)">Home</a></li>
-          <li><a href="#about" @click.prevent="scrollTo('about', 100)">About</a></li>
-          <li><a href="#contact" @click.prevent="scrollTo('contact', 10)">Contact Us</a></li>
-          <li><a href="#delivery" @click.prevent="scrollTo('delivery', 100)">Get Water Delivery</a></li>
-        </ul> 
+        <div :class="{ 'nav-links-wrapper': true, 'active': isMenuOpen }">
+          <button v-if="isMobile" class="menu-close" @click="toggleMenu">
+            <i class="fas fa-times"></i>
+          </button>
+          <ul class="nav-links">
+            <li><router-link :to="{ name: 'home' }"  @click.prevent="scrollTo('home', 0) ">Home</router-link></li>
+            <li><router-link :to="{ name: 'home'}"  @click.prevent="scrollTo('about', 100)">About</router-link></li>
+            <li><router-link :to="{ name: 'home'}" @click.prevent="scrollTo('contact', 10)">Contact Us</router-link></li>
+            <li><router-link :to="{ name: 'home'}" @click.prevent="scrollTo('delivery', 100)">Get Water Delivery</router-link></li>
+          </ul>
+        </div>
       </slot>
     </div>
   </nav>
@@ -30,17 +36,26 @@
 <script>
 export default {
   data() {
-    return { isScrolled: false };
+    return { 
+      isScrolled: false,
+      isMenuOpen: false,
+      isMobile: window.innerWidth <= 768
+    };
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener("resize", this.checkMobile);
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("resize", this.checkMobile);
   },
   methods: {
     handleScroll() {
       this.isScrolled = window.scrollY > 50;
+    },
+    checkMobile() {
+      this.isMobile = window.innerWidth <= 768;
     },
     scrollTo(section, offset) {
       this.$nextTick(() => {
@@ -51,35 +66,35 @@ export default {
             behavior: "smooth",
           });
         }
+        this.isMenuOpen = false;
       });
     },
-  },
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
+    }
+  }
 };
 </script>
+
 <style scoped>
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  padding: 10px 30px 5px;
+  padding: 10px 20px;
   transition: background 0.3s ease, box-shadow 0.3s ease;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   z-index: 1000;
 }
-.top-right-account {
+.top-right {
+  display: flex;
+  gap: 15px;
   position: absolute;
   top: 5px;
   right: 20px;
-}
-.top-right-cart{
-  position: absolute;
-  right: 100px;
-  top: 5px;
-
-
 }
 .account-btn {
   background: none;
@@ -105,11 +120,9 @@ export default {
   justify-content: space-between;
 }
 .logo-img {
-  height: 60px;
+  height: 50px;
 }
 .nav-links {
-  margin-top: 20px;
-  margin-left: 40%;
   list-style: none;
   display: flex;
   gap: 30px;
@@ -119,7 +132,7 @@ export default {
 .nav-links li a {
   text-decoration: none;
   color: white;
-  font-size: 20px;
+  font-size: 18px;
   transition: color 0.3s, font-weight 0.3s;
   font-family: 'Poppins', sans-serif;
 }
@@ -127,44 +140,80 @@ export default {
   color: blue;
   font-weight: 700;
 }
-.delivery-btn {
-  background: blue;
-  color: white;
+.menu-toggle {
+  display: none;
+  background: none;
   border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
+  font-size: 24px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background 0.3s ease;
-  font-family: 'Poppins', sans-serif;
-}
-.delivery-btn:hover {
-  background: darkblue;
+  color: white;
 }
 
-/* Transparent when on top */
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nav-links-wrapper {
+    display: none;
+    flex-direction: column;
+    background: white;
+    color: black;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    padding: 15px;
+    z-index: 1100;
+  }
+  .nav-links-wrapper.active {
+    display: flex;
+  }
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 70%;
+    
+  }
+  .nav-links li a {
+    color: black;
+    font-size: 22px;
+  }
+  .menu-toggle {
+    display: block;
+    color: white;
+  }
+  .menu-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: black;
+  }
+  
+}
+
+/* Change navbar on scroll */
 .navbar {
   background: transparent;
-  color: black;
 }
-/* Change to white with shadow on scroll */
 .navbar.scrolled {
   background: linear-gradient(135deg, #ffffff, #4aa3df);
   opacity: 85%;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
 }
-.navbar.scrolled .nav-links li a {
-  color: white;
-}
+
 .navbar.scrolled .account-btn {
   color: white;
 }
-.navbar.scrolled .nav-links li a:hover{
-  color: blue;
-  font-weight: 700;
-} 
-.navbar.scrolled .account-btn:hover{
-  color: blue;
-  font-weight: 300;
-} 
+
+@media (min-width: 769px) {
+  .navbar.scrolled .nav-links li a {
+    color: white;
+  }
+}
+
 </style>
