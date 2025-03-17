@@ -1,7 +1,6 @@
 <template>
       <Navbar class="bg">
     <template v-slot:modalNavLink>
-      <div class="cart-wrapper"></div>
     </template>
   </Navbar>
     <div>

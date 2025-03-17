@@ -22,10 +22,10 @@
             <i class="fas fa-times"></i>
           </button>
           <ul class="nav-links">
-            <li><a href="#home"   @click.prevent="scrollTo('home', 0) ">Home</a></li>
-            <li><a href="#about"  @click.prevent="scrollTo('about', 100)">About</a></li>
-            <li><a href="#contact"  @click.prevent="scrollTo('contact', 10)">Contact Us</a></li>
-            <li><a href="#delivery"  @click.prevent="scrollTo('delivery', 100)">Get Water Delivery</a></li>
+            <li><router-link :to="{ name: 'home' }"  @click.prevent="scrollTo('home', 0) ">Home</router-link></li>
+            <li><router-link :to="{ name: 'home'}"  @click.prevent="scrollTo('about', 100)">About</router-link></li>
+            <li><router-link :to="{ name: 'home'}" @click.prevent="scrollTo('contact', 10)">Contact Us</router-link></li>
+            <li><router-link :to="{ name: 'home'}" @click.prevent="scrollTo('delivery', 100)">Get Water Delivery</router-link></li>
           </ul>
         </div>
       </slot>
