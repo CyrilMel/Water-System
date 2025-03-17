@@ -21,6 +21,9 @@
           <button v-if="isMobile" class="menu-close" @click="toggleMenu">
             <i class="fas fa-times"></i>
           </button>
+          <div class="mobile-logoo" v-if="isMobile">
+            <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
+          </div>
           <ul class="nav-links">
             <li><router-link :to="{ name: 'home' }"  @click.prevent="scrollTo('home', 0) ">Home</router-link></li>
             <li><router-link :to="{ name: 'home'}"  @click.prevent="scrollTo('about', 100)">About</router-link></li>
@@ -148,19 +151,23 @@ export default {
   cursor: pointer;
   color: white;
 }
-
+.mobile-logoo{
+  margin-left:40% ;
+  margin-bottom: 5%;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
   .nav-links-wrapper {
     display: none;
     flex-direction: column;
-    background: white;
+  background: linear-gradient(135deg, #ffffff, #4aa3df);
+
     color: black;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 50vh;
     justify-content: center;
     padding: 15px;
     z-index: 1100;
@@ -172,11 +179,11 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    margin-bottom: 70%;
+    margin-bottom: 15%;
     
   }
   .nav-links li a {
-    color: black;
+    color: white;
     font-size: 22px;
   }
   .menu-toggle {
@@ -191,7 +198,7 @@ export default {
     border: none;
     font-size: 30px;
     cursor: pointer;
-    color: black;
+    color: white;
   }
   
 }
@@ -202,7 +209,6 @@ export default {
 }
 .navbar.scrolled {
   background: linear-gradient(135deg, #ffffff, #4aa3df);
-  opacity: 85%;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
 }
 
