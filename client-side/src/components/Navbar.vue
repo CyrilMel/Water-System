@@ -1,7 +1,7 @@
 <template>
   <nav :class="{ 'scrolled': isScrolled }" class="navbar">
     <div class="top-right">
-      <router-link to="/login" class="account-btn">
+      <router-link to="/myaccount" class="account-btn">
         <i class="fas fa-user"></i> Account
       </router-link>
       <router-link :to="{ name: 'cart' }" class="account-btn">
@@ -9,7 +9,7 @@
       </router-link>
     </div>
     
-    <div class="nav-content">
+    <div class="nav-content mt-3">
       <div class="logo">
         <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
       </div>
@@ -22,10 +22,10 @@
             <i class="fas fa-times"></i>
           </button>
           <ul class="nav-links">
-            <li><a href="#home" @click.prevent="scrollTo('home', 0)">Home</a></li>
-            <li><a href="#about" @click.prevent="scrollTo('about', 100)">About</a></li>
-            <li><a href="#contact" @click.prevent="scrollTo('contact', 10)">Contact Us</a></li>
-            <li><a href="#delivery" @click.prevent="scrollTo('delivery', 100)">Get Water Delivery</a></li>
+            <li><a href="#home"   @click.prevent="scrollTo('home', 0) ">Home</a></li>
+            <li><a href="#about"  @click.prevent="scrollTo('about', 100)">About</a></li>
+            <li><a href="#contact"  @click.prevent="scrollTo('contact', 10)">Contact Us</a></li>
+            <li><a href="#delivery"  @click.prevent="scrollTo('delivery', 100)">Get Water Delivery</a></li>
           </ul>
         </div>
       </slot>
@@ -162,7 +162,6 @@ export default {
     width: 100%;
     height: 100vh;
     justify-content: center;
-    align-items: center;
     padding: 15px;
     z-index: 1100;
   }
@@ -174,6 +173,7 @@ export default {
     flex-direction: column;
     gap: 20px;
     margin-bottom: 70%;
+    
   }
   .nav-links li a {
     color: black;
@@ -181,7 +181,7 @@ export default {
   }
   .menu-toggle {
     display: block;
-    color: black;
+    color: white;
   }
   .menu-close {
     position: absolute;
@@ -205,12 +205,11 @@ export default {
   opacity: 85%;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
 }
-.navbar.scrolled .nav-links li a {
-  color: white;
-}
+
 .navbar.scrolled .account-btn {
   color: white;
 }
+
 @media (min-width: 769px) {
   .navbar.scrolled .nav-links li a {
     color: white;
