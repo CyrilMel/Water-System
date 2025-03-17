@@ -21,7 +21,7 @@
           <button v-if="isMobile" class="menu-close" @click="toggleMenu">
             <i class="fas fa-times"></i>
           </button>
-          <div class="mobile-logo" v-if="isMobile">
+          <div class="mobile-logoo" v-if="isMobile">
             <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
           </div>
           <ul class="nav-links">
@@ -151,7 +151,7 @@ export default {
   cursor: pointer;
   color: white;
 }
-.mobile-logo{
+.mobile-logoo{
   margin-left:40% ;
   margin-bottom: 5%;
 }
