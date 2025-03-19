@@ -203,23 +203,14 @@ export default {
   
 }
 
-/* Change navbar on scroll */
-.navbar {
-  background: transparent;
-}
-.navbar.scrolled {
-  background: linear-gradient(135deg, #ffffff, #4aa3df);
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
-}
 
-.navbar.scrolled .account-btn {
-  color: white;
-}
 
 @media (min-width: 769px) {
   .navbar.scrolled .nav-links li a {
     color: white;
   }
 }
+
+
 
 </style>
