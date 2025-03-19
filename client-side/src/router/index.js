@@ -14,10 +14,21 @@ const router = createRouter({
       name: 'login',
       component: () => import('../views/LoginView.vue'),
     },
+
     {
       path: '/checkout/cart',
       name: 'cart',
       component: () => import('../views/CartProductView.vue'),
+    },
+    {
+      path: '/myaccount',
+      name: 'myaccount',
+      component: () => import('../views/UserOrder.vue'),
+    },
+    {
+      path: '/finalcheckout',
+      name: 'finalcheckout',
+      component: () => import('../views/Checkout.vue'),
     },
     {
       path: '/overview',
@@ -40,7 +51,8 @@ const router = createRouter({
           path: '/status',
           name: 'status',
           component: () => import('../views/StatusOrderView.vue')
-        }
+        },
+        
       ],
     },
    

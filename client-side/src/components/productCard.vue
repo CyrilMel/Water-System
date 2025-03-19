@@ -18,15 +18,15 @@
           <p class="card-description">{{ card.description }}</p>
         </div>
       </div>
-      
-      <!-- Modal -->
-      <div v-if="showModal" class="modal-overlay" @click="closeModal">
-        <div class="modal-content shadow-lg" @click.stop>
-          <img src="../assets/images/test-data-image4.png" alt="Mineral Water" class="modal-image" />
-          <h2>{{ selectedCard.title }}</h2>
-          <p>{{ selectedCard.fullDescription }}</p>
-          <button class="close-btn" @click="closeModal">Close</button>
-        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div v-if="showModal" class="modal-overlay" @click="closeModal">
+      <div class="modal-content shadow-lg" @click.stop>
+        <img src="../assets/images/test-data-image4.png" alt="Mineral Water" class="modal-image" />
+        <h2>{{ selectedCard.title }}</h2>
+        <p>{{ selectedCard.fullDescription }}</p>
+        <button class="close-btn" @click="closeModal">Close</button>
       </div>
     </div>
   </div>
@@ -77,14 +77,14 @@ export default {
 /* Section Styling */
 .advertisement-section {
   text-align: center;
-  margin-top: 15px;
-  margin-bottom: 60px;
+  margin: 15px auto 60px auto;
+  max-width: 1200px;
+  padding: 0 15px;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
-/* Make it visible when scrolled */
 .fade-in {
   opacity: 1 !important;
   transform: translateY(0) !important;
@@ -105,14 +105,15 @@ export default {
 /* Cards Container */
 .cards-container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   margin-top: 30px;
-  gap: 5%;
+  gap: 20px;
 }
 
-/* Card Styling */
 .card {
-  width: 400px;
+  width: 100%;
+  max-width: 350px;
   background: #E3F2FD;
   border-radius: 15px;
   overflow: hidden;
@@ -171,15 +172,15 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10%;
+  padding: 10px;
 }
 
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 10px;
-  width: 500px;
-  height: 500px;
+  width: 90%;
+  max-width: 500px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -187,7 +188,7 @@ export default {
 }
 
 .modal-image {
-  width: 40%;
+  width: 60%;
   height: auto;
   border-radius: 10px;
   margin-bottom: 15px;
@@ -205,5 +206,24 @@ export default {
 
 .close-btn:hover {
   background: #b30000;
+}
+
+@media (max-width: 768px) {
+  .advertisement-text h1 {
+    font-size: 1.5rem;
+  }
+  .advertisement-text p {
+    font-size: 0.9rem;
+  }
+  .cards-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .card {
+    max-width: 90%;
+  }
+  .modal-image {
+    width: 80%;
+  }
 }
 </style>

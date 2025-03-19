@@ -1,9 +1,9 @@
 <template>
-  <div class="container-fluid py-4">
+  <div class="container-fluid ">
     <div class="row">
       <div class="col-md-3">
         <div class="card p-3">
-          <h6>ITEM CLICKED</h6>
+          <h6>BOTTLES SOLD</h6>
             <h3>136,712</h3>
             <small class="text-secondary"><vue-feather class="text-success" type="arrow-up-right" :size="15" ></vue-feather>
             2.4% From Last Month</small>
@@ -11,21 +11,21 @@
       </div>
       <div class="col-md-3">
         <div class="card p-3">
-          <h6>TOTAL VISITORS</h6>
+          <h6>TOTAL CUSTOMERS</h6>
           <h3>250,615</h3>
           <small class="text-secondary"><vue-feather class="text-danger" type="arrow-down-right" :size="15" ><small></small></vue-feather> 3.6% From Last Month</small>
         </div>
       </div>
       <div class="col-md-3">
         <div class="card p-3">
-          <h6>TOTAL PAGEVIEWS</h6>
+          <h6>TOTAL ORDERS</h6>
           <h3>871,812</h3>
           <small class="text-success">⬆ 1.5% From Last Month</small>
         </div>
       </div>
       <div class="col-md-3">
         <div class="card p-3">
-          <h6>ITEM BOUGHT</h6>
+          <h6>GALLONS SOLD</h6>
           <h3>1,982</h3>
           <small class="text-danger">⬇ 5.6% From Last Month</small>
         </div>
@@ -35,7 +35,7 @@
     <div class="row mt-4">
       <div class="col-lg-8">
         <div class="card p-3">
-          <h5>Total Sales</h5>
+          <h5>Total Revenue</h5>
           <h2 class="text-primary">₱106,720</h2>
           <!-- Placeholder for chart -->
           <canvas id="balanceChart"></canvas>
@@ -52,10 +52,10 @@
                 Marketing <span>₱140</span>
               </li>
               <li class="list-group-item d-flex justify-content-between">
-                Inventory Cost <span>₱100</span>
+                Bottle Packaging <span>₱100</span>
               </li>
               <li class="list-group-item d-flex justify-content-between">
-                Service <span>₱50</span>
+                Delivery Service <span>₱50</span>
               </li>
               <li class="list-group-item d-flex justify-content-between">
                 Other <span>₱350</span>
@@ -103,7 +103,7 @@
             <tbody>
               <tr>
                 <td>251287128</td>
-                <td>Short Sleeve Open...</td>
+                <td>5-Gallon Water Jug</td>
                 <td>10</td>
                 <td>₱2,500</td>
                 <td><span class="badge bg-primary">Delivery</span></td>
@@ -111,7 +111,7 @@
               </tr>
               <tr>
                 <td>168272812</td>
-                <td>Jenno Long Sleev...</td>
+                <td>500ml Bottled Water</td>
                 <td>7</td>
                 <td>₱1,400</td>
                 <td><span class="badge bg-primary">Delivery</span></td>
@@ -135,13 +135,13 @@
             </thead>
             <tbody>
               <tr>
-                <td>LTD89 TNLS Turtl...</td>
+                <td>5-Gallon Water Jug</td>
                 <td>50</td>
                 <td>₱40</td>
                 <td>150</td>
               </tr>
               <tr>
-                <td>LTD02 Thirdday M...</td>
+                <td>500ml Bottled Water</td>
                 <td>106</td>
                 <td>₱24</td>
                 <td>90</td>
