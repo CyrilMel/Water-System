@@ -1,5 +1,5 @@
 <template>
-  <div class="content p-3 flex-grow-1">
+  <div class="card container-fluid">
     <h1>Orders</h1>
     <!-- Dropdown for city selection -->
     <div class="city-selection">
@@ -115,13 +115,6 @@ export default {
 </script>
 
 <style scoped>
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  border-radius: 8px;
-  border: 2px solid rgb(152, 152, 152);
-}
 
 .city-selection {
   margin-bottom: 20px;

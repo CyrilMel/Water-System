@@ -4,7 +4,7 @@
     <div class="main-content">
       <AdminNavbar class="nav" />
       <div class="banner">
-        <div class="content">
+        <div class="content ">
               <div class="inner-content">
                 <router-view></router-view>
               </div>
@@ -71,7 +71,7 @@ export default {
 }
 
 .inner-content {
-  padding: 16px;
+  padding: 50px;
   width: 100%;
 }
 </style>

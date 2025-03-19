@@ -1,16 +1,16 @@
 <template>
-  <div class="sidebar text-dark p-4">
+  <div class="sidebar position-fixed bg-light d-flex z-1 flex-column justify-content-between text-dark p-4">
     <div>
-      <div class="text-center logo">
+      <div class="text-center logo position-absolute">
         <router-link to="/overview">
           <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
         </router-link>
       </div>
-      <nav class="nav flex-column nav-list">
+      <nav class="nav flex-column mt-5">
         <router-link to="/overview" class="nav-link" :class="{ 'active-link': $route.path === '/overview' }">
           <i class="fas fa-chart-bar"></i> Overview
         </router-link>
-          <div class="nav-item">
+          <div class="d-flex position-relative flex-column">
             <button class="nav-link dropdown-btn d-flex justify-content-between align-items-center"  @click="toggleOrders">
               <span><i class="fas fa-box"></i> Orders</span>
               <i :class="showOrders ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
@@ -54,21 +54,13 @@ export default {
 
 <style scoped>
 .sidebar {
-  position: fixed;
   left: 1.2%;
   top: 15px;
   width: 250px;
   height: 96vh;
-  background-color: #f8f9fa;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  z-index: 1;
-  justify-content: space-between;
   transition: transform 0.3s ease-in-out;
-  border-top-right-radius: 15px;
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
+  border-radius: 15px 15px 0 15px;
 }
 .nav-link {
   color: #333;
@@ -83,11 +75,7 @@ export default {
   background-color: #6c63ff;
   color: white;
 }
-.nav-list{
-  margin-top: 40px ;
-}
 .logo{
-  position: absolute;
   top: 2%;
   left: 10%;
 }
@@ -111,11 +99,6 @@ export default {
 }
 .logout-link:hover {
   color: #ff4d4d;
-}
-.nav-item {
-  position: relative;
-  display: flex;
-  flex-direction: column;
 }
 .nested-menu {
   display: flex;

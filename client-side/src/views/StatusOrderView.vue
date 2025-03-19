@@ -1,20 +1,19 @@
 <template>
-  <div class="orders-container">
-    <h1>STATUS</h1>
-
-    <div class="tabs mt-5">
+  <div class=" card d-flex flex-column h-100 overflow-hidden p-4 rounded-4">
+    <h3>Status</h3>
+    <div class="d-flex flex-wrap gap-2 mt-5 tabs">
       <button 
         v-for="status in statuses" 
         :key="status.name" 
         @click="selectedStatus = status.name"
         :class="{ active: selectedStatus === status.name }"
       >
-        {{ status.name }} <span v-if="status.count" class="count">{{ status.count }}</span>
+        {{ status.name }} <span v-if="status.count" class="fs-12 fw-medium bg-white text-dark px-2 py-1 rounded-5">{{ status.count }}</span>
       </button>
     </div>
 
-    <div class="orders">
-      <table>
+    <div class="orders flex-grow-1 overflow-auto mt-2">
+      <table class="shadow-sm">
         <thead>
           <tr>
             <th>#</th>
@@ -35,22 +34,21 @@
             <td>{{ order.product }}</td>
             <td>{{ order.quantity }}</td>
             <td>
-              <span :class="['badge', order.status.toLowerCase()]">{{ order.status }}</span>
+              <span :class="['badge px-3 py-1 rounded-4 text-white', order.status.toLowerCase()]">{{ order.status }}</span>
             </td>
           </tr>
         </tbody>
-      </table>
-         <nav aria-label="Page navigation example">
-          <ul class="pagination mt-3">
+      </table>       
+    </div>
+    <nav aria-label="Page navigation example">
+          <ul class="pagination mt-5">
             <li class="page-item"><a class="page-link" href="#">Previous</a></li>
             <li class="page-item"><a class="page-link" href="#">1</a></li>
             <li class="page-item"><a class="page-link" href="#">2</a></li>
             <li class="page-item"><a class="page-link" href="#">3</a></li>
             <li class="page-item"><a class="page-link" href="#">Next</a></li>
           </ul>
-        </nav>
-    </div>
-    
+    </nav>
   </div>
 </template>
 
@@ -80,20 +78,6 @@ const filteredOrders = computed(() => {
 
 <style scoped>
 /* Full height inside the layout */
-.orders-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden; /* Prevents layout breaking */
-  padding: 20px;
-}
-
-.tabs {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
 .tabs button {
   padding: 8px 16px;
   border-radius: 20px;
@@ -108,20 +92,8 @@ const filteredOrders = computed(() => {
   color: white;
 }
 
-.count {
-  background: white;
-  color: black;
-  padding: 2px 8px;
-  border-radius: 12px;
+.fs-12 {
   font-size: 12px;
-}
-
-/* Make the orders table scrollable */
-.orders {
-  flex-grow: 1;
-  overflow: auto;
-  margin-top: 10px;
-  border-radius: 16px;
 }
 
 .orders table {
@@ -134,12 +106,6 @@ const filteredOrders = computed(() => {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-}
-
-.badge {
-  padding: 5px 10px;
-  border-radius: 12px;
-  color: white;
 }
 
 .badge.pending { background: blue; }
