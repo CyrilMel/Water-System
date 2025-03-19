@@ -1,168 +1,47 @@
-<script setup>
-
-</script>
-
 <template>
+  <Navbar />
   <main>
-    <div>
+    <ChatBot></ChatBot>
 
-    <div class="container-fluid">
-      <div class="row">
-        <!-- Carousel Section -->
-        <!-- Login Section -->
-        <div class="col-md-6 login-section">
-          <div class="login-form margin-top">
-            <div class="logo-container text-center">
-              <!-- <img src="@/assets/images/Logo.png" alt="Company Logo" class="company-logo" /> -->
-            </div>
-            <h2 class="login-title text-center mb-4">
-              <!-- <router-link :to="{ name: 'Register' }">Register </router-link> | Login -->
-            </h2>
-            <div class="underline mb-4"></div>
-
-            <form >
-              <div
-              
-                class="alert"
-      
-                role="alert"
-              >
-              </div>
-              <div class="form-group form-floating mb-3">
-                <input
-                  type="email"
-                  class="form-control"
-                  id="floatingInput"
-                  placeholder="Enter your email"
-                  required
-                />
-                <label for="floatingInput">Email address</label>
-                <small class="form-text text-right mb-0"
-                  ><a href="#">We'll never share your email with anyone else. </a></small
-                >
-              </div>
-              <div class="form-group form-floating mb-3">
-                <input
-                  type="password"
-                  class="form-control"
-                  id="password"
-                  placeholder="Enter your password"
-                  required
-                />
-                <label for="password">Password</label>
-                <!-- <small class="form-text text-right mb-0"
-                  ><router-link to="/forget password">Forgot password? </router-link></small
-                > -->
-              </div>
-              <button
-                type="submit"
-                class="form-group btn btn-primary btn-block drag-active"
-              >
-                Login
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
+    <div id="home">
+      <BannerCarousel />
     </div>
-  </div>
+
+    <div id="about">
+      <productCard />
+    </div>
+
+    <div id="delivery">
+      <MineralDelivery />
+    </div>
+    <div class="iframe-container">
+     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7471.957251572294!2d121.06718689357909!3d14.560025899999987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c87f24b30353%3A0xe23c5dcee145d66f!2sPasig%20Catholic%20College%20(Main%20Campus)!5e1!3m2!1sen!2sph!4v1741572153303!5m2!1sen!2sph" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div id="contact">
+      <ContactUs />
+    </div>
+    <Footer />
   </main>
 </template>
 
-<style scoped>
-/* Base styles */
-body {
-  background-color: #f5f5f5;
-  font-family: 'Poppins', sans-serif;
-}
+<script>
+import Navbar from "@/components/Navbar.vue";
+import BannerCarousel from "@/components/BannerCarousel.vue";
+import productCard from "@/components/productCard.vue"; // Added ProductCard for "About"
+import ContactUs from "@/components/ContactUs.vue";
+import MineralDelivery from "@/components/MineralDelivery.vue";
+import Footer from "@/components/Footer.vue";
+import ChatBot from "@/components/ChatBot.vue";
 
-.company-logo {
-  width: 250px;
-  margin-top: -60px;
-}
-
-.login-title {
-  margin-bottom: 20px;
-}
-
-.form-control {
-  border: 1px solid #ced4da;
-  width: 80%;
-  padding: 8px;
-  font-size: 17px;
-}
-
-.form-group {
-  margin-left: 16%;
-}
-
-.btn-primary {
-  background-color: #2293CD;
-  border: none;
-}
-
-.btn-primary:hover {
-  background-color: #2293CD;
-}
-
-.btn-block {
-  width: 67%;
-  margin-left: 16%;
-}
-
-.alert {
-  margin-left: 16%;
-  width: 67%;
-}
-
-.underline {
-  margin-left: 16%;
-  width: 68%;
-  border-bottom: 1px solid #ced4da;
-  margin-bottom: 20px;
-}
-
-.register-text,
-.login-title a,
-.form-text a {
-  color: #6c757d;
-  text-decoration: none;
-}
-
-.form-group.has-error .form-control {
-  border-color: red;
-}
-
-.login-title a:hover,
-.form-text a:hover {
-  text-decoration: underline;
-}
-
-.margin-top {
-  margin-top: 15%;
-}
-
-.drag-active:active {
-  background-color: #343a40;
-  border-color: #343a40;
-  color: #ffffff;
-}
-.loading-line {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 6px;
-  background-color: rgba(128, 0, 225, 0.8);
-  animation: loading-bar 1s infinite;
-}
-
-@keyframes loading-bar {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-</style>
+export default {
+  components: {
+    Navbar,
+    BannerCarousel,
+    productCard, 
+    ContactUs,
+    Footer,
+    MineralDelivery,
+    ChatBot,
+  },
+};
+</script>
