@@ -10,24 +10,29 @@
         <router-link to="/overview" class="nav-link" :class="{ 'active-link': $route.path === '/overview' }">
           <i class="fas fa-chart-bar"></i> Overview
         </router-link>
-          <div class="d-flex position-relative flex-column">
-            <button class="nav-link dropdown-btn d-flex justify-content-between align-items-center"  @click="toggleOrders">
-              <span><i class="fas fa-box"></i> Orders</span>
-              <i :class="showOrders ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
-            </button>
-            <div v-if="showOrders" class="nested-menu">
-              <router-link to="/orders/area" class="nav-link sub-link" :class="{ 'active-link': $route.path === '/orders/area' }">
-                <i class="fas fa-user"></i> Area
-              </router-link>
-              <router-link to="/orders/client" class="nav-link sub-link" :class="{ 'active-link': $route.path === '/orders/client' }">
-                <i class="fas fa-users"></i> Client
-              </router-link>
-            </div>
+        <div class="d-flex position-relative flex-column">
+          <button class="nav-link dropdown-btn d-flex justify-content-between align-items-center" @click="toggleOrders">
+            <span><i class="fas fa-box"></i> Orders</span>
+            <i :class="showOrders ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+          </button>
+          <div v-if="showOrders" class="nested-menu">
+            <router-link to="/orders/area" class="nav-link sub-link" :class="{ 'active-link': $route.path === '/orders/area' }">
+              <i class="fas fa-user"></i> Area
+            </router-link>
+            <router-link to="/orders/client" class="nav-link sub-link" :class="{ 'active-link': $route.path === '/orders/client' }">
+              <i class="fas fa-users"></i> Client
+            </router-link>
           </div>
+        </div>
         <router-link to="/status" class="nav-link" :class="{ 'active-link': $route.path === '/status' }">
           <i class="fas fa-info-circle"></i> Status
         </router-link>
       </nav>
+    </div>
+    <div class="logout-container text-center mt-4">
+      <router-link to="/logout" class="logout-link">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </router-link>
     </div>
   </div>
 </template>
@@ -38,15 +43,11 @@ export default {
   data() {
     return {
       showOrders: false,
-      sidebarVisible: true,
     };
   },
   methods: {
     toggleOrders() {
       this.showOrders = !this.showOrders;
-    },
-    toggleSidebar() {
-      this.sidebarVisible = !this.sidebarVisible;
     },
   },
 };
@@ -84,7 +85,6 @@ export default {
   height: auto;
 }
 .logout-container {
-  text-align: center;
   padding: 10px;
 }
 .logout-link {
@@ -126,21 +126,6 @@ export default {
 .dropdown-btn:hover {
   background-color: #6c63ff;
   color: white;
-}
-.back-btn {
-  background: none;
-  border: none;
-  color: #333;
-  font-size: 16px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: color 0.3s;
-}
-.back-btn:hover {
-  color: #6c63ff;
 }
 .active-link {
   background-color: #6c63ff;
