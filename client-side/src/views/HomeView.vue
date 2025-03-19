@@ -45,32 +45,3 @@ export default {
   },
 };
 </script>
-<style>
-  .iframe-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; 
-    margin: 20px auto;
-    max-width: 90%;
-  }
-
-  .iframe-container iframe {
-    width: 100%;
-    max-width: 900px;
-    height: 450px;
-    border: none;
-  }
-
-  @media (max-width: 768px) {
-    .iframe-container iframe {
-      height: 300px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .iframe-container iframe {
-      height: 250px;
-    }
-  }
-</style>
