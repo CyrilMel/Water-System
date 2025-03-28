@@ -1,23 +1,20 @@
 <template>
-  <div class="content p-3 flex-grow-1">
+  <div class="card container-fluid">
     <h1>Orders</h1>
-    <!-- Dropdown for city selection -->
     <div class="city-selection">
-      <label for="city" class="form-label">Select City</label>
-      <select id="city" v-model="selectedCity" @change="loadBarangays" class="form-select">
+      <label for="city" class="form-label mx-3">Select City</label>
+      <select id="city" v-model="selectedCity" @change="loadBarangays" class="custom-dropdown refined-dropdown">
         <option v-for="city in cities" :key="city.id" :value="city.id">
           {{ city.name }}
         </option>
       </select>
     </div>
 
-    <!-- Barangays list and Orders for selected barangay -->
     <div class="flex-container">
-      <!-- Barangays list -->
-      <div v-if="barangays.length" class="barangays-list">
+      <div v-if="barangays.length" class="barangays-list card">
         <h2>Barangays in {{ selectedCityName }}</h2>
-        <table class="table table-bordered">
-          <thead>
+        <table class="table table-bordered table-hover">
+          <thead class="table-dark">
             <tr>
               <th>Barangay</th>
               <th>Orders</th> 
@@ -28,6 +25,7 @@
               v-for="barangay in barangays"
               :key="barangay.id"
               @click="selectBarangay(barangay)"
+              class="clickable-row"
             >
               <td>{{ barangay.name }}</td>
               <td>{{ barangay.orders }}</td>
@@ -35,27 +33,34 @@
           </tbody>
         </table>
       </div>
+    </div>
 
-      <!-- Orders for selected barangay -->
-      <div v-if="selectedBarangay" class="orders-list">
-        <h2>Orders for {{ selectedBarangay.name }}</h2>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Client Name</th>
-              <th>Order Details</th>
-              <th>Delivery Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="order in selectedBarangay.ordersList" :key="order.id">
-              <td>{{ order.client }}</td>
-              <td>{{ order.details }}</td>
-              <td>{{ order.deliveryTime }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div v-if="selectedBarangay" class="orders-list card water-theme">
+      <h2>Orders for {{ selectedBarangay.name }}</h2>
+      <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th>Client Name</th>
+            <th>Order Details</th>
+            <th>Container Type</th>
+            <th>Refill</th>
+            <th>Delivery Time</th>
+            <th>Date</th>
+            <th>Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="order in selectedBarangay.ordersList" :key="order.id">
+            <td>{{ order.client }}</td>
+            <td>{{ order.details }}</td>
+            <td>{{ order.containerType }}</td>
+            <td>{{ order.refill ? 'Yes' : 'No' }}</td>
+            <td>{{ order.deliveryTime }}</td>
+            <td>{{ order.date }}</td>
+            <td>{{ order.address }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -76,21 +81,20 @@ export default {
             name: "Bagong Ilog",
             orders: 12,
             ordersList: [
-              { id: 1, client: "Juan Dela Cruz", details: "5 gallons", deliveryTime: "10:00 AM" },
-              { id: 2, client: "Maria Santos", details: "3 gallons", deliveryTime: "11:30 AM" },
+              { id: 1, client: "Juan Dela Cruz", details: "5 gallons", containerType: "Rounded", refill: true, deliveryTime: "10:00 AM", date: "March 19, 2025", address: "123 Bagong Ilog, Pasig" },
+              { id: 2, client: "Maria Santos", details: "3 gallons", containerType: "Normal", refill: false, deliveryTime: "11:30 AM", date: "March 19, 2025", address: "456 Bagong Ilog, Pasig" },
             ],
           },
           {
             id: 102,
-            name: "Caniogan",
-            orders: 18,
+            name: "Pineda",
+            orders: 8,
             ordersList: [
-              { id: 3, client: "Pedro Reyes", details: "8 gallons", deliveryTime: "9:00 AM" },
-              { id: 4, client: "Ana Dela Cruz", details: "4 gallons", deliveryTime: "12:00 PM" },
+              { id: 3, client: "Jose Ramirez", details: "2 gallons", containerType: "Rounded", refill: true, deliveryTime: "9:00 AM", date: "March 19, 2025", address: "789 Pineda, Pasig" },
+              { id: 4, client: "Ana Dela Cruz", details: "4 gallons", containerType: "Normal", refill: false, deliveryTime: "12:00 PM", date: "March 19, 2025", address: "101 Pineda, Pasig" },
             ],
           },
         ],
-        // Add other city barangay data here as needed
       },
       selectedCity: 1,
       selectedCityName: 'Pasig',
@@ -102,7 +106,7 @@ export default {
     loadBarangays() {
       this.selectedCityName = this.cities.find(city => city.id === this.selectedCity).name;
       this.barangays = this.barangaysData[this.selectedCity] || [];
-      this.selectedBarangay = null; // Reset selected barangay when city changes
+      this.selectedBarangay = null;
     },
     selectBarangay(barangay) {
       this.selectedBarangay = barangay;
@@ -115,12 +119,12 @@ export default {
 </script>
 
 <style scoped>
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  border-radius: 8px;
-  border: 2px solid rgb(152, 152, 152);
+
+.card {
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+  background-color: #f8f8f8;
 }
 
 .city-selection {
@@ -131,54 +135,47 @@ export default {
   font-weight: bold;
 }
 
+.custom-dropdown {
+  width: 250px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.refined-dropdown:hover, .refined-dropdown:focus {
+  background: #ffffff;
+  box-shadow: 2px 6px 8px rgba(0, 0, 0, 0.15);
+}
+
 .table {
   width: 100%;
   margin-bottom: 20px;
 }
 
-.barangays-list {
-  flex: 1; /* This allows the barangays list to take up available space */
+
+
+.barangays-list, .orders-list {
+  flex: 1;
+  padding: 20px;
+  border-radius: 12px;
 }
 
 .orders-list {
-  flex: 1; /* This allows the orders list to take up available space */
-  margin-left: 20px; /* Add space between the two sections */
-}
-
-.table th, .table td {
-  text-align: center;
+  margin-top: 20px;
 }
 
 h1, h2 {
   margin-bottom: 20px;
-}
-
-.form-select {
-  width: 200px;
+  font-weight: 600;
 }
 
 .flex-container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 20px;
-}
-
-@media (min-width: 768px) {
-  .content {
-    flex-direction: column;
-  }
-  
-  .flex-container {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .barangays-list {
-    width: 45%;
-  }
-
-  .orders-list {
-    width: 45%;
-  }
 }
 </style>
