@@ -14,7 +14,7 @@ export const getProduct = async (req, res) => {
 export const createProduct = async (req, res) => {
   const product = req.body;
 
-  if (!product.name || !product.price || !product.image) {
+  if (!product.product_name || !product.product_type || !product.container_type || !product.details || !product.price || !product.quantity || !product.product_image) {
     return res.status(400).json({ success: false, message: "Please provide all fields" });
   }
 
@@ -28,6 +28,7 @@ export const createProduct = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
 
 export const updatedProduct = async (req, res) => {
   const { id } = req.params;
