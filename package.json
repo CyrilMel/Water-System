@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server-side/server.js"
+    "dev": "nodemon server-side/server.js",
+    "build": "npm install && npm install --prefix client-side && npm run build --prefix client-side",
+    "start": "node server-side/server.js"
   },
   "keywords": [],
   "type": "module",
