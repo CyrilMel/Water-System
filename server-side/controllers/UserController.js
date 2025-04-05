@@ -24,7 +24,7 @@ export const getUser = async (req, res) => {
 export const createUser = async (req, res) => {
   const user = req.body; // Directly take all fields from the request body
 
-  if (!user.name || !user.email || !user.password || !user.phone_no) {
+  if (!user.name || !user.email || !user.password) {
     return res.status(400).json({ success: false, message: "Please provide all required fields" });
   }
 
@@ -42,6 +42,10 @@ export const createUser = async (req, res) => {
     user.address_id = null; // Set address_id to null if "null" string is passed
   }
 
+  if (user.phone_no === "null" || user.phone_no=== "") {
+    user.phone_no  = null; 
+  }
+
   const newUser = new User(user);
 
   try {
@@ -55,35 +59,46 @@ export const createUser = async (req, res) => {
 
 
 export const updatedUser = async (req, res) => {
-  const user = req.body; 
+  const user = req.body;
+  const { id } = req.params;
 
-  const { id } = req.params;  
-
+  // Check if the ObjectId is valid
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ success: false, message: "Invalid User Id" });
   }
 
+  // Validate that required fields are present (name, email, phone_no)
   if (!user.name || !user.email || !user.phone_no) {
-    return res.status(400).json({ success: false, message: "Please provide all required fields" });
+    return res.status(400).json({ success: false, message: "Please provide all required fields (name, email, phone_no)" });
   }
 
+  // Check if email is already taken by another user
   const existingUser = await User.findOne({ email: user.email });
   if (existingUser && existingUser._id.toString() !== id) {
     return res.status(400).json({ success: false, message: "Email is already in use" });
   }
 
+  // If password is provided, hash it
   if (user.password) {
     const hashedPassword = await bcrypt.hash(user.password, 10);
     user.password = hashedPassword;
   }
 
+  // Handle optional fields: phone_no and address_id
+  if (user.phone_no === "null" || user.phone_no === "") {
+    user.phone_no = null;
+  }
+
+  // If address_id is provided, validate it
   if (user.address_id === "null" || user.address_id === "") {
     user.address_id = null;
   }
 
+  // Attempt to update the user in the database
   try {
     const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
-    
+
+    // Check if the user was updated
     if (!updatedUser) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
@@ -96,6 +111,7 @@ export const updatedUser = async (req, res) => {
 };
 
 
+
 export const deleteUser= async (req, res) => {
   const { id } = req.params;
 
@@ -105,8 +121,44 @@ export const deleteUser= async (req, res) => {
 
   try {
     await User.findByIdAndDelete(id);
-    res.status(200).json({ success: true, message: "Product User" });
+    res.status(200).json({ success: true, message: "User Deleted" });
   } catch (error) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: "Please provide both email and password" });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ success: false, message: "Invalid credentials" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ success: false, message: "Invalid credentials" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone_no: user.phone_no,
+        address_id: user.address_id,  
+      },
+    });
+  } catch (error) {
+    console.error("Error during login:", error.message);
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
