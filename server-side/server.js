@@ -21,7 +21,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/users", userRouter);
 
 if(process.env.NODE_ENV === "production"){
-  app.use(express.static(path.join(__dirname, "/client-side/build")));
+  app.use(express.static(path.join(__dirname, "/client-side/dist")));
 
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "client-side", "dist", "index.html"));
