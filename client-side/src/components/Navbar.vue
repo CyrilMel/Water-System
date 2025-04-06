@@ -1,12 +1,24 @@
 <template>
   <nav :class="{ 'scrolled': isScrolled }" class="navbar">
     <div class="top-right">
-      <router-link to="/myaccount" class="account-btn">
-        <i class="fas fa-user"></i> Account
-      </router-link>
-      <router-link :to="{ name: 'cart' }" class="account-btn">
-        <i class="fas fa-shopping-cart"></i> Cart
-      </router-link>
+      <template v-if="auth.user">
+          <router-link to="/myaccount" class="account-btn">
+          <i class="fas fa-user"></i> Account
+        </router-link>
+        <router-link :to="{ name: 'cart' }" class="account-btn">
+          <i class="fas fa-shopping-cart"></i> Cart
+        </router-link>
+        <button @click="auth.logout" v-if="auth.user" class="account-btn">Logout</button>
+      </template>
+      
+      <template v-else>
+          <router-link to="/register" class="account-btn">
+            Sign Up
+          </router-link>
+          <router-link to="/login" class="account-btn">
+            Login
+          </router-link>
+      </template>
     </div>
     
     <div class="nav-content mt-3">
@@ -37,6 +49,7 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/auth';
 export default {
   data() {
     return { 
@@ -52,6 +65,9 @@ export default {
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.checkMobile);
+  },
+  created() {
+      this.auth = useAuthStore()
   },
   methods: {
     handleScroll() {

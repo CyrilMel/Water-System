@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { useAuthStore } from '../stores/auth'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,9 +14,15 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue'),
+      meta: { requiresVisitor: true },
+      component: () => import('../views/auth/LoginView.vue'),
     },
-
+    {
+      path: '/register',
+      name: 'register',
+      meta: { requiresVisitor: true },
+      component: () => import('../views/auth/RegisterView.vue'),
+    },
     {
       path: '/checkout/cart',
       name: 'cart',
@@ -24,11 +32,13 @@ const router = createRouter({
       path: '/myaccount',
       name: 'myaccount',
       component: () => import('../views/UserOrder.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/finalcheckout',
       name: 'finalcheckout',
       component: () => import('../views/Checkout.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/overview',
@@ -58,5 +68,25 @@ const router = createRouter({
    
   ],
 })
+router.beforeEach((to, from, next) => {
+  const auth = useAuthStore()
 
+  // Re-hydrate user from localStorage (in case of full reload)
+  if (!auth.user && localStorage.getItem('user')) {
+    auth.user = JSON.parse(localStorage.getItem('user'))
+  }
+
+  if (to.meta.requiresAuth && !auth.user) {
+    next({ name: 'login' })
+  }
+  
+  if (to.meta.requiresVisitor && auth.user) {
+    return next({ name: 'home' })
+  }
+
+
+  else {
+    next()
+  }
+})
 export default router

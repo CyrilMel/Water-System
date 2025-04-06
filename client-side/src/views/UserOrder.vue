@@ -12,9 +12,9 @@
           <div class="text-center fs-3 fw-bold"><p>User Profile</p></div>
           <div class="profile-card">
             <img src="../assets/images/blank-profile.png" alt="User" class="profile-img" />
-            <h5 class="user-name">Aldrin Jose Cruz</h5>
-            <p class="user-email">aldrindawin69@gmail.com</p>
-            <p class="user-address">Ilugin Pinagbuhatan, Pasig City</p>
+            <h5 class="user-name">{{ auth.user.name }}</h5>
+            <p class="user-email">{{ auth.user.email }}</p>
+            <p class="user-address">{{auth.user.address_id || "No Address Provided"}}</p>
           </div>
         </div>
         <div class="col-md-8">
@@ -75,6 +75,7 @@
   import ChatBot from "@/components/ChatBot.vue";
   import Navbar from "@/components/Navbar.vue";
   import Footer from "@/components/Footer.vue";
+  import { useAuthStore } from "@/stores/auth";
   
   export default {
     data() {
@@ -115,7 +116,10 @@
       ChatBot,
       Footer,
       Navbar
-    }
+    },
+    created() {
+      this.auth = useAuthStore()
+    },
   };
   </script>
   
