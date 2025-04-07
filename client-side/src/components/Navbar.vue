@@ -23,7 +23,7 @@
     
     <div class="nav-content mt-3">
       <div class="logo">
-        <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
+        <img src="../assets/images/logo.png" alt="Logo" class="nav-logo-img" />
       </div>
       <button class="menu-toggle" @click="toggleMenu">
         <i class="fas fa-bars"></i>
@@ -34,7 +34,7 @@
             <i class="fas fa-times"></i>
           </button>
           <div class="mobile-logoo" v-if="isMobile">
-            <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
+            <img src="../assets/images/logo.png" alt="Logo" class="nav-logo-img" />
           </div>
           <ul class="nav-links">
             <li><router-link :to="{ name: 'home' }"  @click.prevent="scrollTo('home', 0) ">Home</router-link></li>
@@ -138,7 +138,7 @@ export default {
   max-width: 1200px;
   justify-content: space-between;
 }
-.logo-img {
+.nav-logo-img {
   height: 50px;
 }
 .nav-links {
