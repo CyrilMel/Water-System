@@ -1,17 +1,29 @@
 <template>
   <nav :class="{ 'scrolled': isScrolled }" class="navbar">
     <div class="top-right">
-      <router-link to="/myaccount" class="account-btn">
-        <i class="fas fa-user"></i> Account
-      </router-link>
-      <router-link :to="{ name: 'cart' }" class="account-btn">
-        <i class="fas fa-shopping-cart"></i> Cart
-      </router-link>
+      <template v-if="auth.user">
+          <router-link to="/myaccount" class="account-btn">
+          <i class="fas fa-user"></i> Account
+        </router-link>
+        <router-link :to="{ name: 'cart' }" class="account-btn">
+          <i class="fas fa-shopping-cart"></i> Cart
+        </router-link>
+        <button @click="auth.logout" v-if="auth.user" class="account-btn">Logout</button>
+      </template>
+      
+      <template v-else>
+          <router-link to="/register" class="account-btn">
+            Sign Up
+          </router-link>
+          <router-link to="/login" class="account-btn">
+            Login
+          </router-link>
+      </template>
     </div>
     
     <div class="nav-content mt-3">
       <div class="logo">
-        <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
+        <img src="../assets/images/logo.png" alt="Logo" class="nav-logo-img" />
       </div>
       <button class="menu-toggle" @click="toggleMenu">
         <i class="fas fa-bars"></i>
@@ -22,7 +34,7 @@
             <i class="fas fa-times"></i>
           </button>
           <div class="mobile-logoo" v-if="isMobile">
-            <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
+            <img src="../assets/images/logo.png" alt="Logo" class="nav-logo-img" />
           </div>
           <ul class="nav-links">
             <li><router-link :to="{ name: 'home' }"  @click.prevent="scrollTo('home', 0) ">Home</router-link></li>
@@ -37,6 +49,7 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/auth';
 export default {
   data() {
     return { 
@@ -52,6 +65,9 @@ export default {
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.checkMobile);
+  },
+  created() {
+      this.auth = useAuthStore()
   },
   methods: {
     handleScroll() {
@@ -122,7 +138,7 @@ export default {
   max-width: 1200px;
   justify-content: space-between;
 }
-.logo-img {
+.nav-logo-img {
   height: 50px;
 }
 .nav-links {

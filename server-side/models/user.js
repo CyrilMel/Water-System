@@ -5,13 +5,24 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  age: {
-    type: Number,
-    required: true,
-  },
-  address: {
+  email: {
     type: String,
     required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  phone_no: {
+    type: String,
+    required: false,
+  },
+  // Adding the address reference
+  address_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Address", // reference to the Address model
+    required: false,
   },
 },{
     timestamps: true
