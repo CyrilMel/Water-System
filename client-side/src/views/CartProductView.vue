@@ -1,142 +1,146 @@
 <template>
-  <Navbar class="bg">
+  <div>
+  <Navbar class="navbar-bg">
     <template v-slot:modalNavLink>
-      <div class="cart-wrapper">Your Cart ({{ quantity }})</div>
+      <div class="position-absolute start-50 translate-middle-x px-4 py-2 rounded fs-4 fw-semibold text-dark">Your Cart ({{ cartItems.length }})</div>
     </template>
   </Navbar>
+
   <div class="container py-5 mt-5">
     <div class="row justify-content-center">
-      <div class="col-12 col-md-5 mb-3">
-        <router-link to="/" class="text-primary">&lt; Homepage</router-link>
+      <div class="col-12 col-md-7 mb-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><router-link to="/" class="text-decoration-none">Home</router-link></li>
+            <li class="breadcrumb-item active" aria-current="page">Cart</li>
+          </ol>
+        </nav>
         <h4 class="mt-4">Purchases</h4>
-        <div class="card p-3 shadow-sm">
+
+        <div v-if="cartItems.length === 0" class="alert alert-warning">
+          Your cart is empty.
+        </div>
+
+        <div v-for="(item, index) in cartItems" :key="item.productId._id" class="card p-3 shadow-sm mb-3">
           <div class="d-flex align-items-center">
-            <img src="../assets/images/test-data-image.png" style="width: 70px;" alt="Product Image" class="me-3" />
+            <!-- Product Image -->
+            <img :src="item.productId.product_image" alt="Product Image" class="me-3" style="width: 70px;" />
             <div class="flex-grow-1">
-              <h5>Mineral Water</h5>
-              <p class="mb-3">Mineral Water Type 1</p>
+              <!-- Product Name -->
+              <h5>{{ item.productId.product_name }}</h5>
+              <p class="mb-3">{{ item.productId.product_type }}</p>
+
               <div class="d-flex align-items-center">
                 <span class="me-2">QTY</span>
-                <button class="btn btn-primary" @click="decreaseQty">-</button>
-                <input type="text" class="form-control text-center mx-2" v-model="quantity" style="width: 50px;" disabled>
-                <button class="btn btn-primary" @click="increaseQty">+</button>
-                <button class="btn text-danger ms-3" @click="removeItem">
+                <button class="btn btn-primary" @click="decreaseQty(index)">-</button>
+                <input type="text" class="form-control text-center mx-2" v-model="item.quantity" style="width: 50px;" disabled>
+                <button class="btn btn-primary" @click="increaseQty(index)">+</button>
+                <button class="btn text-danger ms-3" @click="removeItem(index)">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
+
               <div class="mt-3">
                 <label class="form-check-label">
-                  <input type="radio" v-model="gallonType" value="refill" class="form-check-input"> Refill (₱40)
+                  <input type="radio" v-model="item.gallonType" value="refill" class="form-check-input"> Refill (₱40)
                 </label>
                 <label class="form-check-label ms-3">
-                  <input type="radio" v-model="gallonType" value="new" class="form-check-input"> New Gallon (+₱40)
+                  <input type="radio" v-model="item.gallonType" value="new" class="form-check-input"> New Gallon (+₱40)
                 </label>
               </div>
             </div>
-            <p class="fw-bold text-center text-md-start">₱{{ gallonCost }}</p>
-          </div>
+              <p class="fw-bold text-center text-md-start">
+                ₱{{ formatPrice(item.productId?.price?.$numberDecimal || 0) }}
+              </p>          
+            </div>
         </div>
       </div>
+
       <div class="col-md-5">
         <h4 class="mb-4">Order Summary</h4>
         <h5>Initial Delivery Charges</h5>
         <p>Subtotal: <span class="float-end">₱{{ subtotal }}</span></p>
-        <p>Delivery Fee: <span class="float-end">₱10.00</span></p>
+        <p>Delivery Fee: <span class="float-end">Free</span></p>
         <p v-if="gallonType === 'new'">Gallon Type: <span class="float-end">New Gallon (₱40)</span></p>
         <hr>
         <p class="fw-bold">Total Amount: <span class="float-end">₱{{ totalCost }}</span></p>
-       <router-link to="/finalcheckout"><button class="btn btn-primary w-100" @click="showModal = true">Proceed to Checkout</button></router-link> 
+
+        <router-link to="/finalcheckout">
+          <button class="btn btn-primary w-100" @click="showModal = true">Proceed to Checkout</button>
+        </router-link>
+
         <p class="mt-2 text-muted small">* By proceeding, you agree to a scheduled subscription with convenient delivery options.</p>
       </div>
     </div>
   </div>
-<div>
-  
 </div>
- 
 </template>
 
 <script>
+import { useCartStore } from '@/stores/cart';
 import Navbar from '@/components/Navbar.vue';
+import { formatPrice } from '@/utils/priceFormat';
+
 export default {
   components: {
     Navbar
   },
   data() {
     return {
-      quantity: 1,
-      gallonType: 'refill',
-      name: '',
-      address: '',
-      phone: '',
+      cartStore: useCartStore(),
       showModal: false
     };
   },
   computed: {
-    gallonCost() {
-      return this.gallonType === 'refill' ? 40 : 80;
+    cartItems() {
+      return this.cartStore.cart ? this.cartStore.cart.items : [];
     },
     subtotal() {
-      return (this.quantity * this.gallonCost).toFixed(2);
+      return this.cartItems.reduce((total, item) => total + (item.quantity * this.getItemCost(item)), 0).toFixed(2);
     },
     totalCost() {
-      return (parseFloat(this.subtotal) + 10).toFixed(2);
+      return (parseFloat(this.subtotal)).toFixed(2); // Add the delivery fee
     }
   },
   methods: {
-    increaseQty() {
-      this.quantity++;
+    getItemCost(item) {
+      const price = item?.productId?.price?.$numberDecimal;
+      if (!price) return 0;
+      const baseCost = parseFloat(price);
+      return item.gallonType === 'new' ? baseCost : baseCost;
     },
-    decreaseQty() {
-      if (this.quantity > 1) this.quantity--;
+
+    async increaseQty(index) {
+      const item = this.cartItems[index];
+      const newQty = item.quantity + 1;
+      await this.cartStore.updateQuantity(item.productId._id, newQty);
+      await this.cartStore.fetchCart();
     },
-    removeItem() {
-      this.quantity = 0;
+
+    async decreaseQty(index) {
+      const item = this.cartItems[index];
+      if (item.quantity > 1) {
+        const newQty = item.quantity - 1;
+        await this.cartStore.updateQuantity(item.productId._id, newQty);
+        await this.cartStore.fetchCart();
+      }
+    },
+
+    async removeItem(index) {
+      const productId = this.cartItems[index].productId._id;
+      await this.cartStore.removeFromCart(productId);
+      await this.cartStore.fetchCart();
+    },
+
+    updateCart(productId) {
+      this.cartStore.removeFromCart(productId);
+    },
+    formatPrice(price) {
+      return formatPrice(price);
     }
+  },
+  async mounted() {
+    await this.cartStore.fetchCart();
   }
 };
 </script>
-
-<style scoped>
-.modal-footer{
-gap: 5px;
-}
-.bg {
-  background: linear-gradient(135deg, #ffffff, #4aa3df);
-  opacity: 85%;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
-}
-.cart-wrapper {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #151515;
-  padding: 10px 20px;
-  border-radius: 5px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 80%;
-}
-.close-button {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-</style>
