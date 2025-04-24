@@ -7,6 +7,7 @@ import productRoutes from "./routes/product-router.js";
 import userRouter from "./routes/user-router.js";
 import addressRouter from "./routes/address-router.js"
 import cartRouter from "./routes/cart-router.js";
+import orderRouter from "./routes/order-router.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use("/api/addresses", addressRouter);
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/orders", orderRouter);
 
 app.listen(PORT, () => {
   connectDB();

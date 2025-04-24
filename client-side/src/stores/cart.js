@@ -60,6 +60,20 @@ export const useCartStore = defineStore('cart', {
       }
     },
     
+    async clearCart() {
+      try {
+        const authStore = useAuthStore();
+        const userId = authStore.user?._id;
+        if (!userId) throw new Error("User not logged in");
+    
+        await axios.delete(`/api/cart/${userId}`); // Call your new backend route
+    
+        this.cart.items = []; // Clear frontend state
+      } catch (err) {
+        this.error = err.response?.data?.message || err.message;
+      }
+    },
+    
     async removeFromCart(productId) {
       try {
         const authStore = useAuthStore();
