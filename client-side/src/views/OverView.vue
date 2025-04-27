@@ -4,9 +4,9 @@
       <h2 class="fw-bold">Overview</h2>
     </div>
         <div class="table-card p-3">
-
-            <div class="p-2 text-light-gray bg-secondary-field rounded-2">
-                <span class="fw-bold">Budget Quote</span>
+          
+            <div class="p-2 text-light-gray bg-secondary-field text-center rounded-2">
+                <h3 class="fw-bold">KYJ WATER REFILLING STATION</h3>
             </div>
 
             <h4 class="my-0 mt-2">Utilities Expenses</h4>

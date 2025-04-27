@@ -13,6 +13,28 @@ export const getAddresses = async (req, res) => {
   }
 };
 
+export const getAddressByUserId = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    // Find the user by userId
+    const user = await User.findById(userId).populate('address_id'); 
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Check if the user has an address
+    if (!user.address_id) {
+      return res.status(404).json({ success: false, message: "Address not found" });
+    }
+    // Send the address data in the response
+    res.status(200).json({ success: true, address: user.address_id });
+  } catch (error) {
+    console.error("Error fetching address:", error.message);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
 export const createAddress = async (req, res) => {
   const { userId, street_no, brgy, city, region } = req.body;
 

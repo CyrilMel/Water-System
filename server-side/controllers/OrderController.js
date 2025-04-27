@@ -42,8 +42,11 @@ export const createOrder = async (req, res) => {
 export const getOrders = async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate('orderItems')
-      .populate('user');
+    .populate({
+      path: 'orderItems',
+      populate: { path: 'productId', select: 'container_type' } // only fetch the product name
+    })
+    .populate('user');
 
     res.status(200).json({ success: true, orders });
   } catch (error) {
