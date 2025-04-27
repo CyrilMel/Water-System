@@ -41,7 +41,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/overview',
+      path: '/dashboard',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -49,8 +49,18 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'overview',
+          name: 'dashboard',
           component: () => import("../views/DashboardView.vue")
+        },
+        {
+          path: '/accounting/overview',
+          name: 'overview',
+          component: () => import('../views/OverView.vue'),
+        },
+        {
+          path: '/accounting/expenses',
+          name: 'expenses',
+          component: () => import('../views/ExpensesView.vue'),
         },
         {
           path: '/orders/area',
@@ -58,7 +68,12 @@ const router = createRouter({
           component: () => import('../views/OrdersView.vue'),
         },
         {
-          path: '/status',
+          path: '/orders/client',
+          name: 'client',
+          component: () => import('../views/AuthTableView.vue'),
+        },
+        {
+          path: '/orders/status',
           name: 'status',
           component: () => import('../views/StatusOrderView.vue')
         },

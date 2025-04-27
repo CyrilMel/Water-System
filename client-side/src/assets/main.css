@@ -1,6 +1,8 @@
 
 /** Custom Css **/
 @import './css/custom.css';
+@import './css/table.css';
+
 
 .logo-img{
     width: 50%;

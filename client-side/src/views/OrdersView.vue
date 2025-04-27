@@ -1,8 +1,11 @@
 <template>
-  <div class="card container-fluid">
-    <h1>Orders</h1>
-    <div class="city-selection">
-      <label for="city" class="form-label mx-3">Select City</label>
+  <div class="page-container">
+    <div class="d-flex justify-content-start">
+      <h2 class="fw-bold">Orders</h2>
+    </div>
+  <div class="table-card">
+    <div class="city-selection mb-1">
+      <label for="city" class="form-label mx-3 fw-bold">Select City</label>
       <select id="city" v-model="selectedCity" @change="loadBarangays" class="custom-dropdown refined-dropdown">
         <option v-for="city in cities" :key="city.id" :value="city.id">
           {{ city.name }}
@@ -10,11 +13,11 @@
       </select>
     </div>
 
-    <div class="flex-container">
-      <div v-if="barangays.length" class="barangays-list card">
+    <div class="table-responsive table-sm">
+      <div v-if="barangays.length" class="barangays-list">
         <h2>Barangays in {{ selectedCityName }}</h2>
-        <table class="table table-bordered table-hover">
-          <thead class="table-dark">
+        <table class="table table-striped table-hover">
+          <thead>
             <tr>
               <th>Barangay</th>
               <th>Orders</th> 
@@ -35,10 +38,11 @@
       </div>
     </div>
 
-    <div v-if="selectedBarangay" class="orders-list card water-theme">
+    <div v-if="selectedBarangay" class="orders-list">
+      <div class="table-responsive table-sm">
       <h2>Orders for {{ selectedBarangay.name }}</h2>
-      <table class="table table-striped table-bordered">
-        <thead class="table-dark">
+      <table class="table table-striped table-hover">
+        <thead>
           <tr>
             <th>Client Name</th>
             <th>Order Details</th>
@@ -63,6 +67,8 @@
       </table>
     </div>
   </div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -94,6 +100,15 @@ export default {
               { id: 4, client: "Ana Dela Cruz", details: "4 gallons", containerType: "Normal", refill: false, deliveryTime: "12:00 PM", date: "March 19, 2025", address: "101 Pineda, Pasig" },
             ],
           },
+          {
+            id: 102,
+            name: "Rosario",
+            orders: 2,
+            ordersList: [
+              { id: 3, client: "Jose Ramirez", details: "2 gallons", containerType: "Rounded", refill: true, deliveryTime: "9:00 AM", date: "March 19, 2025", address: "789 Pineda, Pasig" },
+              { id: 4, client: "Ana Dela Cruz", details: "4 gallons", containerType: "Normal", refill: false, deliveryTime: "12:00 PM", date: "March 19, 2025", address: "101 Pineda, Pasig" },
+            ],
+          },
         ],
       },
       selectedCity: 1,
@@ -120,21 +135,6 @@ export default {
 
 <style scoped>
 
-.card {
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
-  background-color: #f8f8f8;
-}
-
-.city-selection {
-  margin-bottom: 20px;
-}
-
-.city-selection .form-label {
-  font-weight: bold;
-}
-
 .custom-dropdown {
   width: 250px;
   padding: 12px;
@@ -151,11 +151,6 @@ export default {
   box-shadow: 2px 6px 8px rgba(0, 0, 0, 0.15);
 }
 
-.table {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
 
 
 .barangays-list, .orders-list {
@@ -168,14 +163,5 @@ export default {
   margin-top: 20px;
 }
 
-h1, h2 {
-  margin-bottom: 20px;
-  font-weight: 600;
-}
 
-.flex-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
 </style>
