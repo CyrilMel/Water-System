@@ -1,80 +1,84 @@
 <template>
-<div>
-  <Navbar class="bg">
-    <template v-slot:modalNavLink></template>
-  </Navbar>
-
   <div>
-    <ChatBot></ChatBot>
-  </div>
+    <Navbar class="bg">
+      <template v-slot:modalNavLink></template>
+    </Navbar>
 
-  <div class="container mb-4">
-    <div class="row">
-      <!-- User Profile Section -->
-      <div class="col-md-4 user-profile">
-        <div class="text-center fs-3 fw-bold"><p>User Profile</p></div>
-        <div class="profile-card">
-          <img src="../assets/images/blank-profile.png" alt="User" class="profile-img" />
-          <h5 class="user-name">{{ auth.user.name }}</h5>
-          <p class="user-email">{{ auth.user.email }}</p>
-          <p class="user-address">{{ auth.user.address_id || "No Address Provided" }}</p>
+    <div>
+      <ChatBot></ChatBot>
+    </div>
+
+    <div class="container mb-4">
+      <div class="row">
+        <!-- User Profile Section -->
+        <div class="col-md-4 user-profile">
+          <div class="text-center fs-3 fw-bold"><p>User Profile</p></div>
+          <div class="profile-card">
+            <img src="../assets/images/blank-profile.png" alt="User" class="profile-img" />
+            <h5 class="user-name">{{ auth.user.name }}</h5>
+            <p class="user-email">{{ auth.user.email }}</p>
+            <!-- Displaying the full address -->
+            <p class="user-address flex-wrap">
+              {{ userAddress ? `${userAddress.street_no}, ${userAddress.brgy}, ${userAddress.city}` : "No Address Provided" }}
+            </p>
+          </div>
         </div>
-      </div>
 
-      <!-- Order Tabs -->
-      <div class="col-md-8">
-        <ul class="nav nav-tabs custom-tabs">
-          <li class="nav-item">
-            <a class="nav-link active" data-bs-toggle="tab" href="#pending">My Orders</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#history">History</a>
-          </li>
-        </ul>
+        <!-- Order Tabs -->
+        <div class="col-md-8">
+          <ul class="nav nav-tabs custom-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" data-bs-toggle="tab" href="#pending">My Orders</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#history">History</a>
+            </li>
+          </ul>
 
-        <div class="tab-content mt-3">
-          <!-- Pending Orders -->
-          <div id="pending" class="tab-pane fade show active">
-            <div v-if="pendingOrders.length === 0" class="text-center text-muted py-4">
-              No orders yet.
-            </div>
-            <div v-else>
-              <div class="order-card" v-for="order in pendingOrders" :key="order.id">
-                <div class="order-header">
-                  <span class="order-date">{{ order.date }}</span>
-                  <span class="order-status pending">{{ order.status }}</span>
-                </div>
-                <div class="order-body">
-                  <img :src="order.image" alt="Product" class="order-img" />
-                  <div class="order-info">
-                    <p class="order-name">{{ order.name }}</p>
-                    <p class="order-id">Order ID: {{ order.id }}</p>
-                    <p class="order-qty">QTY: {{ order.quantity }}</p>
-                    <p class="order-price">Total: <strong>P {{ getTotal(order) }}</strong></p>
+          <div class="tab-content mt-3">
+            <!-- Pending Orders -->
+            <div id="pending" class="tab-pane fade show active">
+              <div v-if="pendingOrders.length === 0" class="text-center text-muted py-4">
+                No orders yet.
+              </div>
+              <div v-else>
+                <div class="order-card" v-for="order in pendingOrders" :key="order.id">
+                  <div class="order-header">
+                    <span class="order-date">{{ order.date }}</span>
+                    <span class="order-status pending">{{ order.status }}</span>
+                  </div>
+                  <div class="order-body">
+                    <img :src="order.image" alt="Product" class="order-img" />
+                    <div class="order-info">
+                      <p class="order-name">{{ order.name }}</p>
+                      <p class="order-id">Order ID: {{ order.id }}</p>
+                      <p class="order-qty">QTY: {{ order.quantity }}</p>
+                      <p class="order-price">Total: <strong>P {{ getTotal(order) }}</strong></p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Completed Orders -->
-          <div id="history" class="tab-pane fade">
-            <div v-if="orderHistory.length === 0" class="text-center text-muted py-4">
-              No completed orders yet.
-            </div>
-            <div v-else>
-              <div class="order-card" v-for="order in orderHistory" :key="order.id">
-                <div class="order-header">
-                  <span class="order-date">{{ order.date }}</span>
-                  <span class="order-status completed">{{ order.status }}</span>
-                </div>
-                <div class="order-body">
-                  <img :src="order.image" alt="Product" class="order-img" />
-                  <div class="order-info">
-                    <p class="order-name">{{ order.name }}</p>
-                    <p class="order-id">Order ID: {{ order.id }}</p>
-                    <p class="order-qty">QTY: {{ order.quantity }}</p>
-                    <p class="order-price">Total: <strong>P {{ getTotal(order) }}</strong></p>
+            <!-- Completed Orders -->
+            <div id="history" class="tab-pane fade">
+              <div v-if="orderHistory.length === 0" class="text-center text-muted py-4">
+                No completed orders yet.
+              </div>
+              <div v-else>
+                <div class="order-card" v-for="order in orderHistory" :key="order.id">
+                  <div class="order-header">
+                    <span class="order-date">{{ order.date }}</span>
+                    <span class="order-status completed">{{ order.status }}</span>
+                  </div>
+                  <div class="order-body">
+                    <img :src="order.image" alt="Product" class="order-img" />
+                    <div class="order-info">
+                      <p class="order-name">{{ order.name }}</p>
+                      <p class="order-id">Order ID: {{ order.id }}</p>
+                      <p class="order-qty">QTY: {{ order.quantity }}</p>
+                      <p class="order-price">Total: <strong>P {{ getTotal(order) }}</strong></p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -83,10 +87,9 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <Footer />
-</div>
+    <Footer />
+  </div>
 </template>
 
 <script>
@@ -101,11 +104,15 @@ export default {
     return {
       pendingOrders: [],
       orderHistory: [],
+      userAddress: null, // Store the user's address here
     };
   },
   created() {
     this.auth = useAuthStore();
-    this.fetchUserOrders();
+    if (this.auth.user) {
+      this.fetchUserOrders();
+      this.fetchUserAddress(); // Fetch the user's address as well
+    }
   },
   methods: {
     async fetchUserOrders() {
@@ -142,6 +149,17 @@ export default {
         console.error('Failed to fetch orders:', err);
       }
     },
+
+    async fetchUserAddress() {
+      try {
+        const userId = this.auth.user._id;
+        const { data } = await axios.get(`/api/addresses/user/${userId}`);
+        this.userAddress = data.address;
+      } catch (err) {
+        console.error('Failed to fetch address:', err);
+      }
+    },
+
     getTotal(order) {
       return (order.price * order.quantity).toFixed(2);
     }
@@ -153,6 +171,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .bg {

@@ -55,28 +55,47 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import axios from "axios";
 
-const statuses = ref([
-  { name: "All", count: 6 },
-  { name: "Pending", count: 2 },
-  { name: "In-Transit", count: 2 },
-  { name: "Completed", count: 2 },
-]);
-
+const orders = ref([]);
 const selectedStatus = ref("All");
+const loading = ref(true);
 
-const orders = ref([
-  { id: 1, date: "02/01/25", customer: "Dela Cruz, Juan", orderId: "S201983443", address: "117 Zone",  product: "Round", quantity: 35, status: "Pending" },
-  { id: 2, date: "02/01/25", customer: "Dela Cruz, Juan", orderId: "S201983444", address: "117 Zone",  product: "Round", quantity: 35, status: "In-Transit" },
-  { id: 3, date: "02/01/25", customer: "Dela Cruz, Juan", orderId: "S201983445", address: "117 Zone",  product: "Round", quantity: 35, status: "Completed" },
-]);
+// Fetch orders from backend
+const fetchOrders = async () => {
+  try {
+    const res = await axios.get("http://localhost:5000/api/orders"); // adjust URL if needed
+    const rawOrders = res.data.orders;
+
+    // Flatten and map necessary fields
+    orders.value = rawOrders.map(order => ({
+      id: order._id,
+      date: new Date(order.createdAt).toLocaleDateString(),
+      customer: order.user?.name || 'Unknown',
+      address: order.user?.address_id || 'No Address',
+      product: order.orderItems.map(i => i.productId.container_type).join(', '), // This assumes productId is the name or ID
+      quantity: order.orderItems.reduce((sum, i) => sum + i.quantity, 0),
+      status: order.status,
+    }));
+
+    loading.value = false;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    loading.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchOrders();
+});
 
 const filteredOrders = computed(() => {
   if (selectedStatus.value === "All") return orders.value;
   return orders.value.filter(order => order.status === selectedStatus.value);
 });
 </script>
+
 
 <style scoped>
 

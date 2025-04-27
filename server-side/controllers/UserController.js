@@ -1,7 +1,7 @@
 import User from "../models/user.js";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs"; 
-
+import Address from "../models/address.js";
 export const getUser = async (req, res) => {
   // Pagination
   const page = parseInt(req.query.page) || 1;
@@ -67,10 +67,10 @@ export const updatedUser = async (req, res) => {
     return res.status(404).json({ success: false, message: "Invalid User Id" });
   }
 
-  // Validate that required fields are present (name, email, phone_no)
-  if (!user.name || !user.email || !user.phone_no) {
-    return res.status(400).json({ success: false, message: "Please provide all required fields (name, email, phone_no)" });
-  }
+  // // Validate that required fields are present (name, email, phone_no)
+  // if (!user.name || !user.email || !user.phone_no) {
+  //   return res.status(400).json({ success: false, message: "Please provide all required fields (name, email, phone_no)" });
+  // }
 
   // Check if email is already taken by another user
   const existingUser = await User.findOne({ email: user.email });
@@ -92,6 +92,14 @@ export const updatedUser = async (req, res) => {
   // If address_id is provided, validate it
   if (user.address_id === "null" || user.address_id === "") {
     user.address_id = null;
+  } else if (user.address_id && !mongoose.Types.ObjectId.isValid(user.address_id)) {
+    return res.status(400).json({ success: false, message: "Invalid address_id" });
+  } else if (user.address_id) {
+    // Check if the address_id exists in the Address collection
+    const addressExists = await Address.findById(user.address_id);
+    if (!addressExists) {
+      return res.status(400).json({ success: false, message: "Address not found" });
+    }
   }
 
   // Attempt to update the user in the database
