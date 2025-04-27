@@ -70,8 +70,8 @@ export default {
   margin-left: 250px;
 }
 
-.inner-content {
+/* .inner-content {
   padding: 50px;
   width: 100%;
-}
+} */
 </style>

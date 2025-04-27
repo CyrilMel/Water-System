@@ -23,7 +23,9 @@
     
     <div class="nav-content mt-3">
       <div class="logo">
-        <img src="../assets/images/logo.png" alt="Logo" class="nav-logo-img" />
+        <router-link to="/" class="logo-link">
+          <img src="../assets/images/logo.png" alt="Logo" class="nav-logo-img" />
+        </router-link>
       </div>
       <button class="menu-toggle" @click="toggleMenu">
         <i class="fas fa-bars"></i>
@@ -140,6 +142,7 @@ export default {
 }
 .nav-logo-img {
   height: 50px;
+  cursor: pointer;
 }
 .nav-links {
   list-style: none;

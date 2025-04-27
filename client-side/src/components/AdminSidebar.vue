@@ -2,14 +2,29 @@
   <div class="sidebar position-fixed bg-light d-flex z-1 flex-column justify-content-between text-dark p-4">
     <div>
       <div class="text-center logo position-absolute">
-        <router-link to="/overview">
+        <router-link to="/dashboard">
           <img src="../assets/images/logo.png" alt="Logo" class="logo-img" />
         </router-link>
       </div>
       <nav class="nav flex-column mt-5">
-        <router-link to="/overview" class="nav-link" :class="{ 'active-link': $route.path === '/overview' }">
-          <i class="fas fa-chart-bar"></i> Overview
+        <router-link to="/dashboard" class="nav-link" :class="{ 'active-link': $route.path === '/overview' }">
+          <i class="fas fa-chart-bar"></i> Dashboard
         </router-link>
+        <div class="d-flex position-relative flex-column">
+          <button class="nav-link dropdown-btn d-flex justify-content-between align-items-center" @click="toggleAccounting">
+            <span><i class="fa-solid fa-credit-card"></i> Accounting</span>
+            <i :class="showAccounting ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+          </button>
+          <div v-if="showAccounting" class="nested-menu">
+            <router-link to="/accounting/overview" class="nav-link sub-link" :class="{ 'active-link': $route.path === '/accounting/overview' }">
+              Overview
+            </router-link>
+            <router-link to="/accounting/expenses" class="nav-link sub-link" :class="{ 'active-link': $route.path === '/accounting/expenses' }">
+              Expenses
+            </router-link>
+            <hr>
+          </div>
+        </div>
         <div class="d-flex position-relative flex-column">
           <button class="nav-link dropdown-btn d-flex justify-content-between align-items-center" @click="toggleOrders">
             <span><i class="fas fa-box"></i> Orders</span>
@@ -22,17 +37,13 @@
             <router-link to="/orders/client" class="nav-link sub-link" :class="{ 'active-link': $route.path === '/orders/client' }">
               <i class="fas fa-users"></i> Client
             </router-link>
+            <router-link to="/orders/status" class="nav-link" :class="{ 'active-link': $route.path === '/status' }">
+             <i class="fas fa-info-circle"></i> Status
+            </router-link>
+            <hr>
           </div>
         </div>
-        <router-link to="/status" class="nav-link" :class="{ 'active-link': $route.path === '/status' }">
-          <i class="fas fa-info-circle"></i> Status
-        </router-link>
       </nav>
-    </div>
-    <div class="logout-container text-center mt-4">
-      <router-link to="/logout" class="logout-link">
-        <i class="fas fa-sign-out-alt"></i> Logout
-      </router-link>
     </div>
   </div>
 </template>
@@ -43,11 +54,15 @@ export default {
   data() {
     return {
       showOrders: false,
+      showAccounting: false,
     };
   },
   methods: {
     toggleOrders() {
       this.showOrders = !this.showOrders;
+    },
+    toggleAccounting() {
+      this.showAccounting = !this.showAccounting;
     },
   },
 };
