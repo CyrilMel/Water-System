@@ -53,7 +53,6 @@ export default {
       const product = this.productStore.products[index];
       if (product) {
         await this.cartStore.addToCart(product);
-        this.$router.push('/checkout/cart'); // Redirect to cart page after adding to cart
         console.log('Product added to cart:', product);
       } else {
         alert('Product not found!');

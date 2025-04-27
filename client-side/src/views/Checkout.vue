@@ -1,43 +1,76 @@
 <template>
-    <div class="container mt-5 mb-5">
+  <div>
+    <div class="container mt-4 mb-5">
       <div class="row justify-content-center">
-        <!-- Left Side: Customer Information -->
         <div class="col-md-7">
           <div class="card p-4 h-100 shadow-lg rounded">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="checkout/cart">Cart</a></li>
+                <li class="breadcrumb-item"><a href="/checkout/cart">Cart</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Checkout</li>
               </ol>
             </nav>
             <h4 class="mb-3">Billing Information</h4>
-            <form>
+
+            <form @submit.prevent="submitAddress">
               <div class="mb-3">
-                <label for="firstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="firstName" required>
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control text-muted" v-model="auth.user.name" id="name" readonly>
               </div>
+
               <div class="mb-3">
-                <label for="lastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="lastName" required>
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control text-muted" v-model="auth.user.email" id="email" readonly>
               </div>
-              <div class="mb-3">
-                <label for="address" class="form-label">Address</label>
-                <input type="text" class="form-control" id="address" required>
+
+              <div v-if="hasSavedAddress && !editingAddress" class="mb-3">
+                <label for="fullAddress" class="form-label">Full Address</label>
+                <input type="text" class="form-control" :value="fullAddress" id="fullAddress" readonly>
+                <button type="button" class="btn btn-link p-0 mt-2" @click="editingAddress = true">Edit Address</button>
               </div>
-              <div class="mb-3">
-                <label for="apartment" class="form-label">Apartment (Optional)</label>
-                <input type="text" class="form-control" id="apartment">
+
+              <div v-else>
+                <div class="mb-3">
+                  <label for="street_no" class="form-label">Street No</label>
+                  <input type="text" class="form-control" v-model="address.street_no" id="street_no" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="city" class="form-label">City</label>
+                  <select class="form-select" v-model="address.city" id="city" required @change="updateBarangays">
+                    <option value="" disabled>Select City</option>
+                    <option v-for="city in Object.keys(cityBarangays)" :key="city" :value="city">{{ city }}</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="brgy" class="form-label">Barangay</label>
+                  <select class="form-select" v-model="address.brgy" id="brgy" required :disabled="!address.city">
+                    <option value="" disabled>Select Barangay</option>
+                    <option v-for="barangay in filteredBarangays" :key="barangay" :value="barangay">{{ barangay }}</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="region" class="form-label">Region</label>
+                  <select class="form-select" v-model="address.region" id="region" required>
+                    <option value="" disabled>Select Region</option>
+                    <option v-for="region in regions" :key="region" :value="region">{{ region }}</option>
+                  </select>
+                </div>
+
+                <div class="d-flex gap-2">
+                  <button type="button" class="btn btn-primary w-50" @click="saveEditedAddress">Save</button>
+                  <button type="button" class="btn btn-secondary w-50" @click="cancelEdit">Cancel</button>
+                </div>
+
               </div>
-              <div class="mb-3">
+
+              <div class="mb-3 mt-3">
                 <label for="mobile" class="form-label">Mobile Number</label>
-                <input type="text" class="form-control" id="mobile" required>
+                <input type="text" class="form-control" v-model="auth.user.phone_no" id="mobile" required>
               </div>
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="saveInfo">
-                <label class="form-check-label" for="saveInfo">
-                  Save your information for next order
-                </label>
-              </div>
+
               <div class="mb-3">
                 <label for="paymentMethod" class="form-label">Payment Method</label>
                 <select class="form-select" id="paymentMethod" @change="handlePaymentChange">
@@ -49,96 +82,178 @@
                 <button class="btn btn-info" @click.prevent="processGcashPayment">Pay with GCash</button>
               </div>
             </form>
+
           </div>
         </div>
-        
-        <!-- Right Side: Order Summary -->
+
         <div class="col-md-5">
-          <div class="card p-4 h-100 shadow-lg rounded">
-            <h4 class="mb-3">Order Summary</h4>
-            <div class="d-flex align-items-center mb-3">
-              <img src="../assets/images/test-data-image.png" alt="Mineral Water" class="img-thumbnail" width="80">
-              <div class="ms-3">
-                <p class="mb-0">Mineral Water</p>
-                <small>₱40 per bottle</small>
-              </div>
-            </div>
-            <hr>
-            <div class="d-flex justify-content-between">
-              <p>Estimated Subtotal:</p>
-              <p>₱35.00</p>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Sales Tax:</p>
-              <p>₱5.00</p>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Delivery Fee:</p>
-              <p>₱10.00</p>
-            </div>
-            <hr>
-            <div class="d-flex justify-content-between fw-bold">
-              <p>Total:</p>
-              <p>₱50.00</p>
-            </div>
-            <p class="text-muted mt-3">*We will bring your water within the day. Please be patient as we are getting a lot of orders. Thank you.</p>
-            <button class="btn btn-primary w-100">Place Order</button>
-          </div>
+          <OrderSummary @place-order="submitOrder">
+            <template #button="{ placeOrder }">
+              <button
+                class="btn btn-primary w-100"
+                @click="placeOrder"
+                :disabled="editingAddress || cartIsEmpty || !hasSavedAddress || !auth.user.phone_no"
+              >
+                Place Order
+              </button>
+            </template>
+          </OrderSummary>
         </div>
       </div>
     </div>
     <Footer />
+  </div>
+</template>
 
-  </template>
-  
-  <script>
-  import Navbar from '@/components/Navbar.vue';
-  import Footer from '@/components/Footer.vue';
+<script>
+import Navbar from '@/components/Navbar.vue';
+import Footer from '@/components/Footer.vue';
+import { useAuthStore } from "@/stores/auth";
+import { useCartStore } from "@/stores/cart";
+import OrderSummary from '@/components/OrderSummary.vue';
+import axios from '@/axios';
 
-  export default {
-    components:{
-Navbar,
-Footer
+export default {
+  components: {
+    Navbar,
+    Footer,
+    OrderSummary,
+  },
+  data() {
+    return {
+      showGcash: false,
+      paymentMethod: "cod",
+      address: {
+        street_no: '',
+        brgy: '',
+        city: '',
+        region: ''
+      },
+      editingAddress: false,
+      cityBarangays: {
+        "Pasig City": [ "Bagong Ilog", "Bagong Katipunan", "Bambang", "Buting", "Caniogan", "Kalawaan", "Kapasigan",
+                      "Kapitolyo", "Malinao", "Oranbo", "Palatiw", "Pineda", "Sagad", "San Antonio", "San Joaquin", "San Jose",
+                      "San Nicolas (Poblacion)", "San Miguel", "Santa Cruz", "Santa Rosa", "Santo Tomas", "Sumilang", "Ugong",
+                      "Dela Paz", "Manggahan", "Maybunga", "Pinagbuhatan", "Rosario", "Santa Lucia", "Santolan"
+                      ],
+        // "Manila": [],
+        // "Quezon City": [],
+      },
+      regions: ["NCR"]
+    };
+  },
+  computed: {
+    hasSavedAddress() {
+      return this.address.street_no && this.address.brgy && this.address.city && this.address.region;
     },
-    data() {
-      return {
-        showGcash: false,
-      };
+    fullAddress() {
+      return `${this.address.street_no}, ${this.address.brgy}, ${this.address.city}`;
     },
-    methods: {
-  handlePaymentChange(event) {
+    filteredBarangays() {
+      return this.cityBarangays[this.address.city] || [];
+    },
+    cartIsEmpty() {
+      return this.cartStore.cart.items.length === 0;
+    }
+  },
+  created() {
+    this.auth = useAuthStore();
+    this.cartStore = useCartStore();
+    this.fetchUserAddress();
+  },
+  methods: {
+    async fetchUserAddress() {
+      if (this.auth.user._id) {
+        try {
+          const { data } = await axios.get(`/api/addresses/user/${this.auth.user._id}`);
+          if (data.success) {
+            this.address = data.address;
+          }
+        } catch (err) {
+          console.error('Error fetching address:', err);
+        }
+      }
+    },
+    async saveEditedAddress() {
+      try {
+        const { street_no, brgy, city, region } = this.address;
+        const response = await axios.post('/api/addresses', {
+          userId: this.auth.user._id,
+          street_no,
+          brgy,
+          city,
+          region
+        });
+        if (response.data.success) {
+          alert('Address updated successfully!');
+          this.editingAddress = false;
+        }
+      } catch (err) {
+        console.error('Error updating address:', err);
+        alert('Failed to update address.');
+      }
+    },
+    cancelEdit() {
+      this.fetchUserAddress();
+      this.editingAddress = false;
+    },
+    updateBarangays() {
+      this.address.brgy = '';
+    },
+    async submitOrder() {
+      if (this.editingAddress || this.cartIsEmpty || !this.hasSavedAddress || !this.auth.user.phone_no) {
+          alert('Please complete your address and ensure your cart is not empty.');
+          return;
+        }
+
+      try {
+        const cartStore = useCartStore();
+        const auth = this.auth;
+
+        const response = await axios.post('/api/orders', {
+          orderItems: cartStore.cart.items.map(item => ({
+            productId: item.productId._id,
+            quantity: item.quantity,
+            price: item.productId.price?.$numberDecimal || 0,
+          })),
+          user: auth.user._id,
+          total: cartStore.cart.items.reduce((acc, item) => acc + (item.quantity * parseFloat(item.productId.price?.$numberDecimal || 0)), 0),
+          paymentMethod: this.paymentMethod
+        });
+
+        await cartStore.clearCart();
+
+        this.$router.push('/');
+      } catch (err) {
+        console.error('Error placing order:', err);
+        alert('Failed to place order.');
+      }
+    },
+    handlePaymentChange(event) {
     this.showGcash = event.target.value === 'gcash';
   },
   processGcashPayment() {
     window.location.href = "https://www.gcash.com"; // Simulated GCash payment page
   }
+  }
+};
+</script>
+
+<style scoped>
+.breadcrumb-item a {
+  text-decoration: none;
+  color: #007bff;
 }
+select {
 
-
-  };
-  </script>
-  
-  <style scoped>
-  .breadcrumb-item a {
-    text-decoration: none;
-    color: #007bff;
-  }
-  .card {
-    border-radius: 15px;
-    border: none;
-  }
-  select {
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-  }
-  select:hover {
-    background-color: #f8f9fa;
-  }
-  button {
-    transition: all 0.3s ease-in-out;
-  }
-  button:hover {
-    transform: scale(1.05);
-  }
-  </style>
-  
+  cursor: pointer;
+}
+select:hover {
+  background-color: #f8f9fa;
+}
+.form-label::before {
+  content: "*";
+  color: red;
+  float: right;
+}
+</style>

@@ -1,4 +1,5 @@
 <template>
+  <div class="page-container">
   <div class="container-fluid ">
     <div class="row">
       <div class="col-md-3">
@@ -152,12 +153,50 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables); // register all chart types and components
+
 export default {
   name: "DashboardView",
-};
+  mounted() {
+    const ctx = document.getElementById("balanceChart").getContext("2d");
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Revenue (₱)',
+          data: [20000, 25000, 22000, 27000, 30000, 32000],
+          fill: true,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 2,
+          tension: 0.4,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+}
 </script>
 
 <style scoped>
