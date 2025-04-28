@@ -59,6 +59,22 @@ export const useCartStore = defineStore('cart', {
         this.error = err.response?.data?.message || err.message;
       }
     },
+
+    async updateGallonType(productId, gallonType) {
+      try {
+        const authStore = useAuthStore();
+        const userId = authStore.user?._id;
+
+        if (!userId) throw new Error("User not logged in");
+    
+        const res = await axios.patch(`/api/cart/update-gallon/${userId}/${productId}`, {
+          gallonType,
+        });
+        this.cart = res.data.cart;
+      } catch (err) {
+        this.error = err.response?.data?.message || err.message;
+      }
+    },
     
     async clearCart() {
       try {

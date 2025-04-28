@@ -1,5 +1,5 @@
 import Order from '../models/order.js';
-import OrderItem from '../models/OrderItem.js'; 
+import OrderItem from '../models/orderItem.js'; 
 import mongoose from 'mongoose';
 export const createOrder = async (req, res) => {
   try {
@@ -13,6 +13,7 @@ export const createOrder = async (req, res) => {
           productId: item.productId,
           quantity: item.quantity,
           price: item.price,
+          gallonType: item.gallonType,
         });
 
         const savedItem = await orderItem.save();

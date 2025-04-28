@@ -14,6 +14,11 @@ const orderItemSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Decimal128, 
         required: true 
     },
+    gallonType: {
+        type: String,
+        enum: ['new', 'refill'],
+        required: true
+    }
 });
 
 const OrderItem = mongoose.model('OrderItem', orderItemSchema);

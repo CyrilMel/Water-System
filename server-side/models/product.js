@@ -7,22 +7,14 @@ const productSchema = mongoose.Schema({
   },
   product_type: {
     type: String,
-    required: true,
+    required: false,
   },
   container_type: {
     type: String,
     required: true,
   },
-  details: {
-    type: String,
-    required: true,
-  },
   price: {
     type: mongoose.Schema.Types.Decimal128, 
-    required: true,
-  },
-  quantity: {
-    type: Number,
     required: true,
   },
   product_image: {

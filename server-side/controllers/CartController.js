@@ -84,6 +84,32 @@ export const updateCartItemQuantity = async (req, res) => {
   }
 }
 
+export const updateGallonType = async (req, res) => {
+  const { userId, productId } = req.params;
+  const { gallonType } = req.body;
+
+  if (!['new', 'refill'].includes(gallonType)) {
+    return res.status(400).json({ success: false, message: "Invalid gallonType value" });
+  }
+
+  try {
+    const cart = await Cart.findOne({ userId });
+
+    if (!cart) return res.status(404).json({ success: false, message: "Cart not found" });
+
+    const item = cart.items.find(item => item.productId.toString() === productId);
+    if (!item) return res.status(404).json({ success: false, message: "Item not found in cart" });
+
+    item.gallonType = gallonType;
+    await cart.save();
+
+    res.status(200).json({ success: true, message: "Gallon type updated", cart });
+  } catch (err) {
+    console.error("Error updating gallon type:", err.message);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
 export const clearCart = async (req, res) => {
   const { userId } = req.params;
 
