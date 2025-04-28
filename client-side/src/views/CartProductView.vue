@@ -42,10 +42,25 @@
 
               <div class="mt-3">
                 <label class="form-check-label">
-                  <input type="radio" v-model="item.gallonType" value="refill" class="form-check-input"> Refill (₱40)
+                  <input 
+                    type="radio" 
+                    v-model="item.gallonType" 
+                    :name="'gallonType-' + index" 
+                    value="new" 
+                    class="form-check-input"
+                    checked
+                    @change="updateGallonType(item.productId._id, item.gallonType)"
+                  > New Gallon
                 </label>
                 <label class="form-check-label ms-3">
-                  <input type="radio" v-model="item.gallonType" value="new" class="form-check-input"> New Gallon (+₱40)
+                  <input 
+                    type="radio" 
+                    v-model="item.gallonType" 
+                    :name="'gallonType-' + index" 
+                    value="refill" 
+                    class="form-check-input"
+                    @change="updateGallonType(item.productId._id, item.gallonType)"
+                  > Refill (-₱40)
                 </label>
               </div>
             </div>
@@ -61,7 +76,7 @@
         <h5>Initial Delivery Charges</h5>
         <p>Subtotal: <span class="float-end">₱{{ subtotal }}</span></p>
         <p>Delivery Fee: <span class="float-end">Free</span></p>
-        <p v-if="gallonType === 'new'">Gallon Type: <span class="float-end">New Gallon (₱40)</span></p>
+        <p>Gallon Charges: <span class="float-end">₱{{ newGallonCharges }}</span></p>
         <hr>
         <p class="fw-bold">Total Amount: <span class="float-end">₱{{ totalCost }}</span></p>
 
@@ -88,10 +103,19 @@ export default {
   data() {
     return {
       cartStore: useCartStore(),
+      gallonType: 'new',
       showModal: false
     };
   },
   computed: {
+    newGallonCharges() {
+      return this.cartItems.reduce((total, item) => {
+        if (item.gallonType === 'refill') {
+          return total - 40 * item.quantity;
+        }
+        return total;
+      }, 0).toFixed(2);
+    },
     cartItems() {
       return this.cartStore.cart ? this.cartStore.cart.items : [];
     },
@@ -107,7 +131,16 @@ export default {
       const price = item?.productId?.price?.$numberDecimal;
       if (!price) return 0;
       const baseCost = parseFloat(price);
-      return item.gallonType === 'new' ? baseCost : baseCost;
+      return item.gallonType === 'new' ? baseCost - 40 : baseCost;
+    },
+    
+    async updateGallonType(productId, gallonType) {
+      try {
+        await this.cartStore.updateGallonType(productId, gallonType);
+        await this.cartStore.fetchCart(); // Refresh cart to get updated data
+      } catch (error) {
+        console.error("Failed to update gallon type:", error);
+      }
     },
 
     async increaseQty(index) {

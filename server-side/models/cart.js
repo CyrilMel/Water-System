@@ -6,7 +6,12 @@ const cartItemSchema = new mongoose.Schema({
         ref: 'Product', 
         required: true 
       },
-        quantity: { type: Number, default: 1 },
+    quantity: { type: Number, default: 1 },
+    gallonType: {
+        type: String,
+        enum: ['new', 'refill'],
+        default: 'new'
+    }
 });
 
 const cartSchema = new mongoose.Schema({
