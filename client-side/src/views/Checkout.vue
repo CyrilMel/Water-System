@@ -214,6 +214,7 @@ export default {
           orderItems: cartStore.cart.items.map(item => ({
             productId: item.productId._id,
             quantity: item.quantity,
+            gallonType: item.gallonType || 'new',
             price: item.productId.price?.$numberDecimal || 0,
           })),
           user: auth.user._id,
