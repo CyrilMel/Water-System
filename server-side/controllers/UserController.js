@@ -3,18 +3,12 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs"; 
 import Address from "../models/address.js";
 export const getUser = async (req, res) => {
-  // Pagination
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
 
   try {
-    const startIndex = (page - 1 ) * limit;
-    const users = await User.find().sort({createdAt: -1}) // Sort by createdAt in descending order
-    .skip(startIndex).limit(limit);
-
-    const total = await User.countDocuments();
-    const totalPage = Math.ceil(total / limit);
-    res.status(200).json({ page, limit, total, totalPages: totalPage ,  users });
+    const users = await User.find({})
+    .populate('address_id')
+    .exec();
+    res.status(200).json({ success: true, users: users });
   } catch (error) {
     console.error("error om fetching users:", error.message);
     res.status(500).json({ success: false, message: "Server Error" });

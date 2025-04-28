@@ -68,6 +68,12 @@ const router = createRouter({
           component: () => import('../views/OrdersView.vue'),
         },
         {
+          path: '/orders/:orderId',
+          name: 'orderDetails',
+          component: () => import('../views/OrderDetailsView.vue'),
+          props: true, // Pass route params as props
+        },
+        {
           path: '/orders/client',
           name: 'client',
           component: () => import('../views/AuthTableView.vue'),

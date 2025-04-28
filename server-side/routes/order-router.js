@@ -7,7 +7,7 @@ router.get('/', getOrders);
 router.post('/', createOrder);
 router.get('/:id', getOrderById);
 router.get('/user/:userId', getOrdersByUserId);
-router.put('/:id/status', updateOrderStatus);
+router.patch('/:id/status', updateOrderStatus);
 router.delete('/:id', deleteOrder);
 
 export default router;

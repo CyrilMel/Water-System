@@ -47,7 +47,10 @@ export const getOrders = async (req, res) => {
       path: 'orderItems',
       populate: { path: 'productId', select: 'container_type' } // only fetch the product name
     })
-    .populate('user');
+    .populate({
+      path: 'user',
+      populate: { path: 'address_id', select: 'street_no brgy city region' } // only fetch the address fields
+    })
 
     res.status(200).json({ success: true, orders });
   } catch (error) {
@@ -59,9 +62,15 @@ export const getOrders = async (req, res) => {
 // Get a single order
 export const getOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id)
-      .populate('orderItems')
-      .populate('user');
+    const order = await Order.findOne({ orderId: req.params.id })
+    .populate({
+      path: 'orderItems',
+      populate: { path: 'productId', select: 'product_name container_type' } // only fetch the product name
+    })
+    .populate({
+      path: 'user',
+      populate: { path: 'address_id', select: 'street_no brgy city region' } // only fetch the address fields
+    })
 
     if (!order) {
       return res.status(404).json({ success: false, message: "Order not found" });
@@ -100,12 +109,17 @@ export const getOrdersByUserId = async (req, res) => {
 export const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
+    const orderId = req.params.id; // This should match the :id in your route
 
-    const updatedOrder = await Order.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true }
-    );
+    // Debug log to ensure the order ID is correct
+    console.log("Received orderId:", orderId);
+
+    if (!status) {
+      return res.status(400).json({ success: false, message: "Status is required" });
+    }
+
+    // Find the order by ID and update the status
+    const updatedOrder = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
 
     if (!updatedOrder) {
       return res.status(404).json({ success: false, message: "Order not found" });
@@ -113,7 +127,7 @@ export const updateOrderStatus = async (req, res) => {
 
     res.status(200).json({ success: true, order: updatedOrder });
   } catch (error) {
-    console.log("Error updating order status:", error.message);
+    console.error("Error updating order status:", error.message);
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };

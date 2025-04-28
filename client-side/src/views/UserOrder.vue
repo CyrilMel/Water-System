@@ -17,7 +17,6 @@
             <img src="../assets/images/blank-profile.png" alt="User" class="profile-img" />
             <h5 class="user-name">{{ auth.user.name }}</h5>
             <p class="user-email">{{ auth.user.email }}</p>
-            <!-- Displaying the full address -->
             <p class="user-address flex-wrap">
               {{ userAddress ? `${userAddress.street_no}, ${userAddress.brgy}, ${userAddress.city}` : "No Address Provided" }}
             </p>
@@ -45,16 +44,19 @@
                 <div class="order-card" v-for="order in pendingOrders" :key="order.id">
                   <div class="order-header">
                     <span class="order-date">{{ order.date }}</span>
-                    <span class="order-status pending">{{ order.status }}</span>
+                    <span :class="['order-status', getStatusClass(order.status)]">{{ order.status }}</span>
                   </div>
-                  <div class="order-body">
-                    <img :src="order.image" alt="Product" class="order-img" />
+                  <div class="order-body" v-for="item in order.items" :key="item.name">
+                    <img :src="item.image" alt="Product" class="order-img" />
                     <div class="order-info">
-                      <p class="order-name">{{ order.name }}</p>
+                      <p class="order-name">{{ item.name }}</p>
                       <p class="order-id">Order ID: {{ order.id }}</p>
-                      <p class="order-qty">QTY: {{ order.quantity }}</p>
-                      <p class="order-price">Total: <strong>P {{ getTotal(order) }}</strong></p>
+                      <p class="order-qty">QTY: {{ item.quantity }}</p>
+                      <p class="order-price">Price: <strong>₱ {{ (item.price * item.quantity).toFixed(2) }}</strong></p>
                     </div>
+                  </div>
+                  <div class="mt-3 text-end">
+                    Total Order: <strong>₱ {{ (order.total).toFixed(2) }}</strong>
                   </div>
                 </div>
               </div>
@@ -69,16 +71,19 @@
                 <div class="order-card" v-for="order in orderHistory" :key="order.id">
                   <div class="order-header">
                     <span class="order-date">{{ order.date }}</span>
-                    <span class="order-status completed">{{ order.status }}</span>
+                    <span :class="['order-status', getStatusClass(order.status)]">{{ order.status }}</span>
                   </div>
-                  <div class="order-body">
-                    <img :src="order.image" alt="Product" class="order-img" />
+                  <div class="order-body" v-for="item in order.items" :key="item.name">
+                    <img :src="item.image" alt="Product" class="order-img" />
                     <div class="order-info">
-                      <p class="order-name">{{ order.name }}</p>
+                      <p class="order-name">{{ item.name }}</p>
                       <p class="order-id">Order ID: {{ order.id }}</p>
-                      <p class="order-qty">QTY: {{ order.quantity }}</p>
-                      <p class="order-price">Total: <strong>P {{ getTotal(order) }}</strong></p>
+                      <p class="order-qty">QTY: {{ item.quantity }}</p>
+                      <p class="order-price">Price: <strong>₱ {{ (item.price * item.quantity).toFixed(2) }}</strong></p>
                     </div>
+                  </div>
+                  <div class="mt-3 text-end">
+                    Total Order: <strong>₱ {{ (order.total).toFixed(2) }}</strong>
                   </div>
                 </div>
               </div>
@@ -104,14 +109,14 @@ export default {
     return {
       pendingOrders: [],
       orderHistory: [],
-      userAddress: null, // Store the user's address here
+      userAddress: null,
     };
   },
   created() {
     this.auth = useAuthStore();
     if (this.auth.user) {
       this.fetchUserOrders();
-      this.fetchUserAddress(); // Fetch the user's address as well
+      this.fetchUserAddress();
     }
   },
   methods: {
@@ -120,31 +125,40 @@ export default {
         const userId = this.auth.user._id;
         const { data } = await axios.get(`/api/orders/user/${userId}`);
 
-        const pending = [];
-        const history = [];
+        const groupOrders = (orders, filterStatus) => {
+          const grouped = {};
 
-        data.orders.forEach(order => {
-          order.orderItems.forEach(item => {
-            const formattedOrder = {
-              id: order.orderId,
-              name: item.productId.product_name,
-              quantity: item.quantity,
-              price: parseFloat(item.price?.$numberDecimal || item.price),
-              image: item.productId.product_image,
-              status: order.status,
-              date: new Date(order.createdAt).toLocaleDateString(),
-            };
+          orders.forEach(order => {
+            const status = order.status.toLowerCase();
+            if (!filterStatus.includes(status)) return;
 
-            if (order.status.toLowerCase() === 'completed') {
-              history.push(formattedOrder);
-            } else {
-              pending.push(formattedOrder);
+            const date = new Date(order.createdAt).toLocaleDateString();
+
+            if (!grouped[order.orderId]) {
+              grouped[order.orderId] = {
+                id: order.orderId,
+                status: order.status,
+                total: order.total,
+                date,
+                items: []
+              };
             }
-          });
-        });
 
-        this.pendingOrders = pending;
-        this.orderHistory = history;
+            order.orderItems.forEach(item => {
+              grouped[order.orderId].items.push({
+                name: item.productId.product_name,
+                quantity: item.quantity,
+                price: parseFloat(item.price?.$numberDecimal || item.price),
+                image: item.productId.product_image
+              });
+            });
+          });
+
+          return Object.values(grouped);
+        };
+
+        this.pendingOrders = groupOrders(data.orders, ['pending', 'in-transit']);
+        this.orderHistory = groupOrders(data.orders, ['completed', 'delivered']);
       } catch (err) {
         console.error('Failed to fetch orders:', err);
       }
@@ -160,8 +174,13 @@ export default {
       }
     },
 
-    getTotal(order) {
-      return (order.price * order.quantity).toFixed(2);
+    getStatusClass(status) {
+      const normalized = status.toLowerCase();
+      if (normalized === 'pending') return 'pending';
+      if (normalized === 'in-transit') return 'in-transit';
+      if (normalized === 'completed') return 'completed';
+      if (normalized === 'delivered') return 'delivered';
+      return 'default-status';
     }
   },
   components: {
@@ -171,7 +190,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 .bg {
@@ -224,24 +242,31 @@ export default {
   margin-bottom: 10px;
 }
 .order-status {
-  padding: 5px 10px;
-  border-radius: 15px;
+  padding: 4px 10px;
+  border-radius: 12px;
   font-weight: bold;
   text-transform: capitalize;
 }
-.pending {
-  background: #ffc107;
+.order-status.pending {
+  background-color: #f0ad4e;
   color: white;
 }
-.completed {
-  background: #28a745;
+.order-status.in-transit {
+  background-color: #5bc0de;
+  color: white;
+}
+.order-status.completed,
+.order-status.delivered {
+  background-color: #5cb85c;
   color: white;
 }
 .order-body {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 }
 .order-img {
+  object-fit: contain;
   width: 60px;
   height: 60px;
   border-radius: 5px;
