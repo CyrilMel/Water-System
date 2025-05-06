@@ -1,0 +1,104 @@
+.table {
+    margin-bottom: 0rem;
+    border: none;
+}
+.table-responsive {
+    border-bottom: 1px solid #E6EAF5;
+}
+table-responsive.table-xs {
+    min-height: 8rem !important;
+}
+
+/* Show 3 data per page*/
+.table-responsive.table-sm {
+    min-height: 16rem !important;
+}
+
+/* Show 5 data per page*/
+.table-responsive.table-md {
+    min-height: 24rem !important;
+}
+
+/* Show 10 data per page*/
+.table-responsive.table-lg {
+    min-height: 28rem !important;
+}
+
+/* Show 10 data with image per page*/
+.table-responsive.table-xl {
+    min-height: 40rem !important;
+}
+.page-container {
+  margin: 1px 40px;
+  margin-left: 0px;
+  padding-left: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.table-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 1) !important;
+    padding: 1rem 0rem;
+    box-shadow: 0px 2px 4px 0px rgba(101, 101, 101, 0.1);
+}
+.table-badge {
+    padding: 0.15rem 0.5rem;
+    vertical-align: middle;
+    background-color: rgba(230, 234, 245, 1) !important;
+    color: rgba(157, 153, 172, 1);
+    border-radius: 100px;
+    font-weight: 800;
+    font-size: 12px !important;
+}
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+    --bs-table-bg-type: rgba(248, 248, 255, 1) !important;
+}
+
+.table> :not(caption)>*>* {
+    border-bottom-width: 0px;
+    white-space: nowrap;
+}
+
+.table> :not(caption)>*>*:first-child {
+    padding-left: 1rem;
+}
+
+.table> :not(caption)>*>*:last-child {
+    padding-right: 1rem;
+}
+
+.table.table-striped td {
+    /* font-family: "Avenir"; */
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.table.table-striped>thead {
+    /* font-family: "Avenir"; */
+    font-size: 12px;
+    font-weight: 800;
+    border: 1px solid #E6EAF5;
+    border-right: 0px;
+    border-left: 0px;
+}
+
+.table-hover>tbody>tr:hover>* {
+    color: rgb(52, 130, 225,1) !important;
+    --bs-table-color-state: rgba(231, 37, 33, 1) !important;
+    --bs-table-bg-state: rgb(234, 233, 253) !important;
+}
+.form-control, .form-select {
+    box-shadow: none !important;
+    border-color: transparent;
+    background-color: #F7F7FD !important;
+    /* height: 54px !important; */
+    color: black;
+}
+.form-search{
+    height: 40px !important;
+    padding: 0.25rem 1rem;
+}

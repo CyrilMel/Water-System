@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { useAuthStore } from '../stores/auth'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,9 +14,15 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue'),
+      meta: { requiresVisitor: true },
+      component: () => import('../views/auth/LoginView.vue'),
     },
-
+    {
+      path: '/register',
+      name: 'register',
+      meta: { requiresVisitor: true },
+      component: () => import('../views/auth/RegisterView.vue'),
+    },
     {
       path: '/checkout/cart',
       name: 'cart',
@@ -24,14 +32,16 @@ const router = createRouter({
       path: '/myaccount',
       name: 'myaccount',
       component: () => import('../views/UserOrder.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/finalcheckout',
       name: 'finalcheckout',
       component: () => import('../views/Checkout.vue'),
+      meta: { requiresAuth: true },
     },
     {
-      path: '/overview',
+      path: '/dashboard',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -39,8 +49,18 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'overview',
+          name: 'dashboard',
           component: () => import("../views/DashboardView.vue")
+        },
+        {
+          path: '/accounting/overview',
+          name: 'overview',
+          component: () => import('../views/OverView.vue'),
+        },
+        {
+          path: '/accounting/expenses',
+          name: 'expenses',
+          component: () => import('../views/ExpensesView.vue'),
         },
         {
           path: '/orders/area',
@@ -48,7 +68,18 @@ const router = createRouter({
           component: () => import('../views/OrdersView.vue'),
         },
         {
-          path: '/status',
+          path: '/orders/:orderId',
+          name: 'orderDetails',
+          component: () => import('../views/OrderDetailsView.vue'),
+          props: true, // Pass route params as props
+        },
+        {
+          path: '/orders/client',
+          name: 'client',
+          component: () => import('../views/AuthTableView.vue'),
+        },
+        {
+          path: '/orders/status',
           name: 'status',
           component: () => import('../views/StatusOrderView.vue')
         },
@@ -58,5 +89,25 @@ const router = createRouter({
    
   ],
 })
+router.beforeEach((to, from, next) => {
+  const auth = useAuthStore()
 
+  // Re-hydrate user from localStorage (in case of full reload)
+  if (!auth.user && localStorage.getItem('user')) {
+    auth.user = JSON.parse(localStorage.getItem('user'))
+  }
+
+  if (to.meta.requiresAuth && !auth.user) {
+    next({ name: 'login' })
+  }
+  
+  if (to.meta.requiresVisitor && auth.user) {
+    return next({ name: 'home' })
+  }
+
+
+  else {
+    next()
+  }
+})
 export default router
