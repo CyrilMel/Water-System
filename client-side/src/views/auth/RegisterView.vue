@@ -15,6 +15,10 @@
             <input type="email" placeholder="Email" class="login-input" v-model="email" required />
           </div>
           <div class="input-group">
+            <i class="fa-solid fa-phone"></i>
+            <input type="tel" placeholder="Phone" class="login-input" v-model="phone_no" required />
+          </div>
+          <div class="input-group">
             <i class="fa-solid fa-lock input-icon"></i>
             <input :type="showPassword ? 'text' : 'password'" placeholder="Password" class="login-input" v-model="password" required />
             <i class="fa-solid" :class="showPassword ? 'fa-eye' : 'fa-eye-slash'" @click="togglePassword"></i>
@@ -42,6 +46,8 @@
         name: '',
         email: '',
         password: '',
+        phone_no: '',
+        address_id: null,
         confirmPassword: '',
         errorMessages: '',
         confirmPasswordError: '',
@@ -65,6 +71,8 @@
             name: this.name,
             email: this.email,
             password: this.password,
+            phone_no: this.phone_no,
+            address_id: this.address_id,
           })
         }
   

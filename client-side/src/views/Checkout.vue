@@ -23,6 +23,11 @@
                 <input type="text" class="form-control text-muted" v-model="auth.user.email" id="email" readonly>
               </div>
 
+              <div class="mb-3 mt-3">
+                <label for="mobile" class="form-label">Mobile Number</label>
+                <input type="text" class="form-control text-muted" v-model="auth.user.phone_no" id="mobile" readonly>
+              </div>
+
               <div v-if="hasSavedAddress && !editingAddress" class="mb-3">
                 <label for="fullAddress" class="form-label">Full Address</label>
                 <input type="text" class="form-control" :value="fullAddress" id="fullAddress" readonly>
@@ -51,13 +56,13 @@
                   </select>
                 </div>
 
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                   <label for="region" class="form-label">Region</label>
                   <select class="form-select" v-model="address.region" id="region" required>
                     <option value="" disabled>Select Region</option>
                     <option v-for="region in regions" :key="region" :value="region">{{ region }}</option>
                   </select>
-                </div>
+                </div> -->
 
                 <div class="d-flex gap-2">
                   <button type="button" class="btn btn-primary w-50" @click="saveEditedAddress">Save</button>
@@ -66,12 +71,7 @@
 
               </div>
 
-              <div class="mb-3 mt-3">
-                <label for="mobile" class="form-label">Mobile Number</label>
-                <input type="text" class="form-control" v-model="auth.user.phone_no" id="mobile" required>
-              </div>
-
-              <div class="mb-3">
+              <div class="my-3">
                 <label for="paymentMethod" class="form-label">Payment Method</label>
                 <select class="form-select" id="paymentMethod" @change="handlePaymentChange">
                   <option value="cod">Cash on Delivery (COD)</option>
@@ -126,10 +126,11 @@ export default {
       address: {
         street_no: '',
         brgy: '',
-        city: '',
-        region: ''
+        city: 'Pasig City',
+        region: 'NCR'
       },
       editingAddress: false,
+      addressSaved: false,
       cityBarangays: {
         "Pasig City": [ "Bagong Ilog", "Bagong Katipunan", "Bambang", "Buting", "Caniogan", "Kalawaan", "Kapasigan",
                       "Kapitolyo", "Malinao", "Oranbo", "Palatiw", "Pineda", "Sagad", "San Antonio", "San Joaquin", "San Jose",
@@ -144,7 +145,7 @@ export default {
   },
   computed: {
     hasSavedAddress() {
-      return this.address.street_no && this.address.brgy && this.address.city && this.address.region;
+      return this.addressSaved;
     },
     fullAddress() {
       return `${this.address.street_no}, ${this.address.brgy}, ${this.address.city}`;
@@ -168,6 +169,7 @@ export default {
           const { data } = await axios.get(`/api/addresses/user/${this.auth.user._id}`);
           if (data.success) {
             this.address = data.address;
+            this.addressSaved = true;
           }
         } catch (err) {
           console.error('Error fetching address:', err);
@@ -187,6 +189,7 @@ export default {
         if (response.data.success) {
           alert('Address updated successfully!');
           this.editingAddress = false;
+          this.addressSaved = true;
         }
       } catch (err) {
         console.error('Error updating address:', err);
