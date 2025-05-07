@@ -157,10 +157,6 @@
 </template>
 
 <script>
-import { Chart, registerables } from 'chart.js';
-
-Chart.register(...registerables); // register all chart types and components
-
 export default {
   name: "DashboardView",
   mounted() {
