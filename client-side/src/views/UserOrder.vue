@@ -49,7 +49,7 @@
                   <div class="order-body" v-for="item in order.items" :key="item.name">
                     <img :src="item.image" alt="Product" class="order-img" />
                     <div class="order-info">
-                      <p class="order-name">{{ item.name }}</p>
+                      <p class="order-name">{{ item.name }}, {{ item.gallonType }}</p>
                       <p class="order-id">Order ID: {{ order.id }}</p>
                       <p class="order-qty">QTY: {{ item.quantity }}</p>
                       <p class="order-price">Price: <strong>₱ {{ (item.price * item.quantity).toFixed(2) }}</strong></p>
@@ -148,6 +148,7 @@ export default {
               grouped[order.orderId].items.push({
                 name: item.productId.product_name,
                 quantity: item.quantity,
+                gallonType:item.gallonType,
                 price: parseFloat(item.price?.$numberDecimal || item.price),
                 image: item.productId.product_image
               });

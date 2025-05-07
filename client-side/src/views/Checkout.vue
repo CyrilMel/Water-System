@@ -187,7 +187,12 @@ export default {
           region
         });
         if (response.data.success) {
-          alert('Address updated successfully!');
+          Swal.fire({
+            title: "Address updated successfully!",
+            icon: "success",
+            draggable: true
+          });
+
           this.editingAddress = false;
           this.addressSaved = true;
         }
@@ -221,11 +226,18 @@ export default {
             price: item.productId.price?.$numberDecimal || 0,
           })),
           user: auth.user._id,
-          total: cartStore.cart.items.reduce((acc, item) => acc + (item.quantity * parseFloat(item.productId.price?.$numberDecimal || 0)), 0),
+          total: cartStore.cart.items.reduce((acc, item) => acc + (item.quantity * cartStore.getTotalCost(item)), 0).toFixed(2),
           paymentMethod: this.paymentMethod
         });
-
+        
         await cartStore.clearCart();
+
+        await Swal.fire({
+          icon: 'success',
+          title: 'Order Placed',
+          text: 'Your order has been placed successfully!',
+          confirmButtonText: 'OK'
+        });
 
         this.$router.push('/');
       } catch (err) {
