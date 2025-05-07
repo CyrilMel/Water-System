@@ -15,7 +15,7 @@
       <MineralDelivery />
     </div>
     <div class="iframe-container">
-     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7471.957251572294!2d121.06718689357909!3d14.560025899999987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c87f24b30353%3A0xe23c5dcee145d66f!2sPasig%20Catholic%20College%20(Main%20Campus)!5e1!3m2!1sen!2sph!4v1741572153303!5m2!1sen!2sph" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.807310262384!2d121.09570017468252!3d14.5530089859277!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c7cb396912f3%3A0xbc7384447895ea32!2sBlk%206%2C%205145%202nd%20St%2C%20Pasig%2C%20Metro%20Manila!5e0!3m2!1sen!2sph!4v1746583028185!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
     <div id="contact">
       <ContactUs />
