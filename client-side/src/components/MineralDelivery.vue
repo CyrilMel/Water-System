@@ -53,6 +53,16 @@ export default {
       const product = this.productStore.products[index];
       if (product) {
         await this.cartStore.addToCart(product);
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: `${product.product_name} added to cart`,
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        });
+        
         this.$router.push('/checkout/cart'); // Redirect to cart page after adding to cart
         console.log('Product added to cart:', product);
       } else {

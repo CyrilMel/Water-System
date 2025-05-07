@@ -102,6 +102,15 @@ import { formatPrice } from '@/utils/priceFormat';
           if (response.data.success) {
             this.order = response.data.order;
             this.fetchOrderDetails()
+            Swal.fire({
+              toast: true,
+              position: 'top-end',
+              icon: 'success',
+              title: `Order status updated to "${newStatus}"`,
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+            });
           } else {
             this.errorMessage = 'Failed to update order status';
           }

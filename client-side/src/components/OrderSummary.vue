@@ -6,27 +6,36 @@
       <div v-for="item in cartItems" :key="item.productId._id" class="d-flex align-items-center mb-3">
         <img :src="item.productId.product_image" alt="Product" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: contain;">
         <div class="ms-3">
-          <p class="mb-0">{{ item.productId.product_name }}</p>
+            <div class="d-flex justify-content-between">
+              <p class="mb-0">{{ item.productId.product_name }}</p>
+              <p>{{ item.gallonType }}</p>
+            </div>
           <p class="mb-0">{{ item.quantity }}x</p>
           <small>₱{{ formatPrice(item.productId.price?.$numberDecimal || 0) }}</small>
         </div>
       </div>
   
       <hr>
-  
+
+      <div class="d-flex justify-content-between">
+        <p>Container Reuse Discount:</p>
+        <p>₱{{ newGallonCharges }}</p>
+      </div>
+
       <div class="d-flex justify-content-between">
         <p>Estimated Subtotal:</p>
         <p>₱{{ subtotal }}</p>
       </div>
+  
       <div class="d-flex justify-content-between">
-        <p>Delivery Fee:</p>
+        <p>Delivery:</p>
         <p>Free</p>
       </div>
-  
+
       <hr>
   
       <div class="d-flex justify-content-between fw-bold">
-        <p>Total:</p>
+        <p>Total Amount:</p>
         <p>₱{{ totalCost }}</p>
       </div>
   
@@ -57,15 +66,21 @@ import { formatPrice } from '@/utils/priceFormat';
   const cartItems = computed(() => cartStore.cart?.items || []);
 
   const subtotal = computed(() =>
-    cartItems.value.reduce((total, item) => total + (item.quantity * getItemCost(item)), 0).toFixed(2)
+    cartItems.value.reduce((total, item) => total + (item.quantity * cartStore.getTotalCost(item)), 0).toFixed(2)
   );
 
   const totalCost = computed(() => parseFloat(subtotal.value).toFixed(2));
 
-  function getItemCost(item) {
-    const price = parseFloat(item.productId.price?.$numberDecimal || 0);
-    return item.gallonType === 'new' ? price : price; // Update this if you add extra charge for "new"
-  }
+  const newGallonCharges = computed(() => {
+    const total = cartItems.value.reduce((sum, item) => {
+      if (item.gallonType === 'refill') {
+        return sum - 40 * item.quantity
+      }
+      return sum
+    }, 0)
+    return total.toFixed(2)
+  })
+
 </script>
 <style scoped>
 .card {

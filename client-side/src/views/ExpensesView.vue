@@ -1,26 +1,24 @@
 <template>
-  <div class="container">
-    <h1>Expense Tracker</h1>
-
+  <div class="page-container">
+    <div class="d-flex justify-content-start">
+      <h2 class="fw-bold">Expense Tracker</h2>
+    </div>
     <!-- Button to trigger modal -->
-    <div class="d-flex justify-content-center mb-4">
-      <button class="btn btn-primary" @click="showModal = true">Add New Expense</button>
-    </div>
-
-    <!-- Button to show monthly transactions -->
-    <div class="d-flex justify-content-center mb-4">
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="monthlyTransactionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          Monthly Transactions
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="monthlyTransactionsDropdown">
-          <li><a class="dropdown-item" href="#" @click="showMonthlyExpenses('May')">May 2025</a></li>
-          <li><a class="dropdown-item" href="#" @click="showMonthlyExpenses('June')">June 2025</a></li>
-          <li><a class="dropdown-item" href="#">July 2025</a></li>
-          <li><a class="dropdown-item" href="#">August 2025</a></li>
-        </ul>
+    <div class="table-card p-3">
+      <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-primary" @click="showModal = true">Add New Expense</button>
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="monthlyTransactionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              Monthly Transactions
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="monthlyTransactionsDropdown">
+              <li><a class="dropdown-item" href="#" @click="showMonthlyExpenses('May')">May 2025</a></li>
+              <li><a class="dropdown-item" href="#" @click="showMonthlyExpenses('June')">June 2025</a></li>
+              <li><a class="dropdown-item" href="#">July 2025</a></li>
+              <li><a class="dropdown-item" href="#">August 2025</a></li>
+            </ul>
+          </div>
       </div>
-    </div>
 
     <!-- Table for Today's Expenses -->
     <h3 class="mb-3">Today's Expenses</h3>
@@ -97,7 +95,7 @@
 
     <!-- Modal Background (optional) -->
     <div v-if="showModal" class="modal-backdrop fade show"></div>
-
+    </div>
   </div>
 </template>
 

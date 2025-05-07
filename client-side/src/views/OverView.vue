@@ -63,18 +63,18 @@
                 </div>
             </div>
 
-            <h4 class="my-0 mt-2">Schedule</h4>
+            <!-- <h4 class="my-0 mt-2">Advertising Expense</h4>
             <div class="d-flex justify-content-flex-wrap gap-3 text-nowrap align-items-center">
                 <div class="col">
                     <div class="d-flex justify-content-center flex-wrap text-light-gray gap-1">
                         <div class="col-12">
-                            Date
+                            Repairs and Maintenance Expense
                         </div>
                         <div class="col-12">
-                            Period of Insurance
+                            Supplies Expense
                         </div>
                         <div class="col-12">
-                            Coverage
+                            Net Profit/Loss
                         </div>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="d-flex justify-content-flex-wrap gap-3">
                 <div class="col bg-secondary-field rounded-2 d-flex flex-column justify-content-center align-items-start p-3">
@@ -100,21 +100,21 @@
                 </div>
 
                 <div class="col bg-secondary-field rounded-2 d-flex flex-column justify-content-center align-items-start p-3">
-                    <label class="text-secondary-gray body-3 text-light-gray">Total Premium</label>
-                    <h2 class="mb-0 mt-2">₱1,000,000.00</h2>
+                    <label class="text-secondary-gray body-3 text-light-gray">Total Sale</label>
+                    <h2 class="mb-0 mt-2">₱106,720</h2>
                 </div>
                 <div class="col bg-secondary-field rounded-2 d-flex flex-column justify-content-center align-items-start p-3">
                     <div class="d-flex justify-content-flex-wrap gap-3">
                         <div class="col">
                             <div class="d-flex justify-content-center flex-wrap gap-1">
                                 <div class="col-12">
-                                    <span class="text-secondary-gray body-3 p-0 d-flex gap-3 mb-0 text-light-gray">Total Amount Due</span>
+                                    <span class="text-secondary-gray body-3 p-0 d-flex gap-3 mb-0 text-light-gray">Maintenance Expense</span>
                                 </div>
                                 <div class="col-12">
-                                    <span class="text-secondary-gray body-3 p-0 d-flex gap-3 mb-0 text-light-gray">Monthly Due</span>
+                                    <span class="text-secondary-gray body-3 p-0 d-flex gap-3 mb-0 text-light-gray">Supplies Expense</span>
                                 </div>
                                 <div class="col-12">
-                                    <span class="text-secondary-gray body-3 p-0 d-flex gap-3 mb-0 text-light-gray">Remaining Months</span>
+                                    <span class="text-secondary-gray body-3 p-0 d-flex gap-3 mb-0 text-light-gray">Net Profit/Loss</span>
                                 </div>
                             </div>
                         </div>
@@ -124,10 +124,10 @@
                                     <h5 class="text-black mb-0 fw-normal">₱23,500.00</h5>
                                 </div>
                                 <div class="col-12">
-                                    <h5 class="text-black mb-0 fw-normal">₱1958.33</h5>
+                                    <h5 class="text-black mb-0 fw-normal">₱1,958.33</h5>
                                 </div>
                                 <div class="col-12">
-                                    <h5 class="text-black mb-0 fw-normal">12</h5>
+                                    <h5 class="text-black mb-0 fw-normal">₱1,200.00</h5>
                                 </div>
                             </div>
                         </div>
