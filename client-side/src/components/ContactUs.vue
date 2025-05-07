@@ -13,17 +13,17 @@
               <div class="contact-card">
                   <i class="fas fa-phone"></i>
                   <h3>Phone</h3>
-                  <p>+1 234 567 890</p>
+                  <p>09686033752</p>
               </div>
               <div class="contact-card">
                   <i class="fas fa-envelope"></i>
                   <h3>Email</h3>
-                  <p>contact@yourcompany.com</p>
+                  <p>aquastation@gmail.com</p>
               </div>
               <div class="contact-card">
                   <i class="fas fa-map-marker-alt"></i>
                   <h3>Visit Us</h3>
-                  <p>123 Water St, Pateros</p>
+                  <p>Blk 6 Phase 1 Ilugin, 5145 2nd St, Pasig, Kalakhang Maynila</p>
               </div>
           </div>
         
