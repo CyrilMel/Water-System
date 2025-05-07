@@ -3,7 +3,7 @@
     <div class="profile">
       <i class="fas fa-bell text-white"></i>
       <img src="/src/assets/images/blank-profile.png" class="profile-img" />
-      <span class="username text-white">Aldrin Cruz</span>
+      <span class="username text-white">Julie Dimanlig</span>
     </div>
   </div>
 </template>
