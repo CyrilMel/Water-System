@@ -65,7 +65,7 @@ export const getOrderById = async (req, res) => {
     const order = await Order.findOne({ orderId: req.params.id })
     .populate({
       path: 'orderItems',
-      populate: { path: 'productId', select: 'product_name container_type' } // only fetch the product name
+      populate: { path: 'productId', select: 'product_name container_type product_image' } // only fetch the product name
     })
     .populate({
       path: 'user',
