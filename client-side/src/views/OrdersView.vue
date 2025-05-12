@@ -109,7 +109,7 @@ export default {
           }
 
           const orderDetails = order.orderItems.map(item => {
-            return `${item.quantity} gallon(s) - ₱${parseFloat(item.price.$numberDecimal)} (${item.productId.container_type})`;
+            return `${item.quantity} qty - ₱${parseFloat(item.price.$numberDecimal)} (${item.productId.product_name})`;
           }).join(', ');
 
           barangayMap[city][brgy].push({

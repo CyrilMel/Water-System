@@ -107,7 +107,7 @@ export const useCartStore = defineStore('cart', {
       const price = item?.productId?.price?.$numberDecimal;
       if (!price) return 0;
       const baseCost = parseFloat(price);
-      return item.gallonType === 'refill' ? baseCost - 40 : baseCost;
+      return item.gallonType === 'refill' ? baseCost - 115 : baseCost;
     }
   }
 });

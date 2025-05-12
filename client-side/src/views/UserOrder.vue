@@ -49,13 +49,17 @@
                   <div class="order-body" v-for="item in order.items" :key="item.name">
                     <img :src="item.image" alt="Product" class="order-img" />
                     <div class="order-info">
-                      <p class="order-name">{{ item.name }}, {{ item.gallonType }}</p>
-                      <p class="order-id">Order ID: {{ order.id }}</p>
+                      <p class="order-id text-muted">Order ID: {{ order.id }}</p>
+                      <p class="order-name fw-bold">{{ item.name }}</p>
+                      <p class="order-gallon-type text-primary">{{ item.gallonType.toUpperCase() }} gallon(s)</p>
                       <p class="order-qty">QTY: {{ item.quantity }}</p>
                       <p class="order-price">Price: <strong>₱ {{ (item.price * item.quantity).toFixed(2) }}</strong></p>
                     </div>
                   </div>
                   <div class="mt-3 text-end">
+                    <div v-if="getReuseDiscount(order) > 0" class="text-muted small">
+                      Container Reuse Discount: -₱{{ getReuseDiscount(order).toFixed(2) }}
+                    </div>
                     Total Order: <strong>₱ {{ (order.total).toFixed(2) }}</strong>
                   </div>
                 </div>
@@ -76,13 +80,17 @@
                   <div class="order-body" v-for="item in order.items" :key="item.name">
                     <img :src="item.image" alt="Product" class="order-img" />
                     <div class="order-info">
-                      <p class="order-name">{{ item.name }}</p>
-                      <p class="order-id">Order ID: {{ order.id }}</p>
+                      <p class="order-id text-muted">Order ID: {{ order.id }}</p>
+                      <p class="order-name fw-bold">{{ item.name }}</p>
+                      <p class="order-gallon-type text-primary">{{ item.gallonType.toUpperCase() }} gallon(s)</p>
                       <p class="order-qty">QTY: {{ item.quantity }}</p>
                       <p class="order-price">Price: <strong>₱ {{ (item.price * item.quantity).toFixed(2) }}</strong></p>
                     </div>
                   </div>
                   <div class="mt-3 text-end">
+                    <div v-if="getReuseDiscount(order) > 0" class="text-muted small">
+                      Container Reuse Discount: -₱{{ getReuseDiscount(order).toFixed(2) }}
+                    </div>
                     Total Order: <strong>₱ {{ (order.total).toFixed(2) }}</strong>
                   </div>
                 </div>
@@ -120,6 +128,14 @@ export default {
     }
   },
   methods: {
+    getReuseDiscount(order) {
+      return order.items?.reduce((total, item) => {
+        if (item.gallonType?.toLowerCase() === 'refill') {
+          return total + (115 * item.quantity);
+        }
+        return total;
+      }, 0) || 0;
+    },
     async fetchUserOrders() {
       try {
         const userId = this.auth.user._id;
@@ -278,7 +294,6 @@ export default {
   font-size: 14px;
 }
 .text-muted {
-  font-size: 16px;
   color: #888 !important;
 }
 </style>
