@@ -40,7 +40,7 @@
               <img :src="item.productId.product_image" alt="Product Image" class="me-3 rounded" style="width: 60px; height: 80px; object-fit: contain;" />
               <div>
                 <p class="mb-1 fw-semibold">{{ item.productId.product_name }}</p>
-                <p class="mb-1 text-muted">{{ item.productId.container_type }} - {{ item.gallonType.toUpperCase() }} gallon(s)</p>
+                <p class="mb-1 text-primary"> {{ item.gallonType.toUpperCase() }} gallon(s)</p>
                 <p class="mb-1 text-muted">{{ item.quantity }} quantity</p>
                 <p class="fw-bold ">₱{{ formatPrice(item.price.$numberDecimal) }}</p>
               </div>
@@ -106,7 +106,7 @@ import { formatPrice } from '@/utils/priceFormat';
         reuseDiscount() {
           return this.order.orderItems?.reduce((total, item) => {
           if (item.gallonType?.toLowerCase() === 'refill') {
-            return total + (40 * item.quantity);
+            return total + (115 * item.quantity);
           }
           return total;
         }, 0) || 0;

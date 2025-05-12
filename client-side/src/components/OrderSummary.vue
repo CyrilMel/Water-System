@@ -6,12 +6,10 @@
       <div v-for="item in cartItems" :key="item.productId._id" class="d-flex align-items-center mb-3">
         <img :src="item.productId.product_image" alt="Product" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: contain;">
         <div class="ms-3">
-            <div class="d-flex justify-content-between">
-              <p class="mb-0">{{ item.productId.product_name }}</p>
-              <p>{{ item.gallonType }}</p>
-            </div>
-          <p class="mb-0">{{ item.quantity }}x</p>
-          <small>₱{{ formatPrice(item.productId.price?.$numberDecimal || 0) }}</small>
+            <p class="mb-0">{{ item.productId.product_name }}</p>
+            <p class="mb-0 text-primary">{{ item.gallonType.toUpperCase() }} gallon(s)</p>
+            <p class="mb-0">{{ item.quantity }} QTY</p>
+          <small class="fw-bold">₱{{ formatPrice(item.productId.price?.$numberDecimal || 0) }}</small>
         </div>
       </div>
   
@@ -74,7 +72,7 @@ import { formatPrice } from '@/utils/priceFormat';
   const newGallonCharges = computed(() => {
     const total = cartItems.value.reduce((sum, item) => {
       if (item.gallonType === 'refill') {
-        return sum - 40 * item.quantity
+        return sum - 115 * item.quantity
       }
       return sum
     }, 0)

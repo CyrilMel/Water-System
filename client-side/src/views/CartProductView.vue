@@ -60,7 +60,7 @@
                     value="refill" 
                     class="form-check-input"
                     @change="updateGallonType(item.productId._id, item.gallonType)"
-                  > Refill (-₱40)
+                  > Refill (-₱115)
                 </label>
               </div>
             </div>
@@ -111,7 +111,7 @@ export default {
     newGallonCharges() {
       return this.cartItems.reduce((total, item) => {
         if (item.gallonType === 'refill') {
-          return total - 40 * item.quantity;
+          return total - 115 * item.quantity;
         }
         return total;
       }, 0).toFixed(2);
