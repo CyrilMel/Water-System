@@ -36,7 +36,7 @@
       <div class="col-lg-7">
         <div class="card p-3">
           <h5 class="fw-bold">Total Income for Year 2025</h5>
-          <h2 class="text-primary fw-bold">₱135,360</h2>
+          <h2 class="text-primary fw-bold">₱134,195</h2>
           <!-- Placeholder for chart -->
           <canvas id="balanceChart"></canvas>
         </div>
@@ -172,7 +172,7 @@ export default {
         labels: ['Jan', 'Feb', 'Mar', 'Apr'],
         datasets: [{
           label: 'Revenue (₱)',
-          data: [30840, 32840, 34840, 36840],
+          data: [30965, 31550, 34840, 36840],
           fill: true,
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
