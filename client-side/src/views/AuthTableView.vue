@@ -18,18 +18,14 @@
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Address</th>
-                <th>Role</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="user in users" :key="user._id">
                 <td>{{ user.name }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.phone || 'no contact' }} </td>
-                <td>{{ user.address_id.street_no}}, {{ user.address_id.brgy }}, {{ user.address_id.city }}</td>
-                <td>
-                  <span class="badge bg-primary">user</span>
-                </td>
+                <td>{{ user.phone_no || 'no contact' }} </td>
+                <td>{{ user.address_id ? `${user.address_id.street_no}, ${user.address_id.brgy}, ${user.address_id.city}` : 'No address provided' }}</td>
               </tr>
             </tbody>
           </table>

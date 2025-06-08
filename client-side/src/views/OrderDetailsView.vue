@@ -1,60 +1,87 @@
 <template>
   <div class="page-container">
-      <div class="d-flex justify-content-start">
-        <h2 class="fw-bold">Order Details: {{ order.orderId }}</h2>
-      </div>
       <div class="table-card p-3">
-      <div class="order-details">
-          <div v-if="loading">Loading...</div>
-          <div v-else-if="errorMessage">{{ errorMessage }}</div>
-          <div v-else>
-              <div class="d-flex justify-content-between">
-                  <p><strong>Date: </strong>{{ formatDate(order.createdAt) }}</p>
-                  <p><strong>Status:</strong> {{ order.status.toUpperCase() }}</p>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="fw-bold text-primary">Order Details: {{ order.orderId }}</h4>
+          <span class="bg-primary text-white border rounded-2 text-uppercase px-3 py-2 fw-bold">{{ order.status }}</span>
+        </div>
+
+      <div v-if="loading">Loading...</div>
+      <div v-else-if="errorMessage">{{ errorMessage }}</div>
+        <div v-else>
+          <div class="mb-4">
+            <div class="d-flex align-items-center mb-2">
+              <i class="fa-solid fa-calendar-days me-2 text-primary"></i>
+              <strong>{{ formatDate(order.createdAt) }}</strong>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="fa-solid fa-user me-2 text-primary"></i>
+              <span><strong>Customer:</strong> {{ order.user.name }}</span>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="fa-solid fa-phone me-2 text-primary"></i>
+              <span><strong>Phone:</strong> {{ order.user.phone_no }}</span>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="fa-solid fa-location-dot me-2 text-primary"></i>
+              <span><strong>Address:</strong> {{ order.user.address_id.street_no }}, {{order.user.address_id.brgy}}, {{ order.user.address_id.city }}</span>
+            </div>
+            <div class="d-flex align-items-center mb-2">
+              <i class="fa-solid fa-wallet me-2 text-primary
+              
+              "></i>
+              <span><strong>Payment Method:</strong> {{ order.paymentMethod.toUpperCase() }}</span>
+            </div>
+          </div>
+
+          <h5 class="fw-bold mb-3">Order Items</h5>
+          <div class="mb-4">
+            <div v-for="item in order.orderItems" :key="item._id" class="d-flex align-items-start border rounded mb-3 p-3">
+              <img :src="item.productId.product_image" alt="Product Image" class="me-3 rounded" style="width: 60px; height: 80px; object-fit: contain;" />
+              <div>
+                <p class="mb-1 fw-semibold">{{ item.productId.product_name }}</p>
+                <p class="mb-1 text-primary"> {{ item.gallonType.toUpperCase() }} gallon(s)</p>
+                <p class="mb-1 text-muted">{{ item.quantity }} quantity</p>
+                <p class="fw-bold ">₱{{ formatPrice(item.price.$numberDecimal) }}</p>
               </div>
-              <p><strong>Customer:</strong> {{ order.user.name }}</p>
-              <p><strong>Phone:</strong> {{ order.user.phone_no }}</p>
-              <p><strong>Address:</strong> {{ order.user.address_id.street_no }}, {{order.user.address_id.brgy }}, {{ order.user.address_id.city }}</p>
-              <p><strong>Payment Method:</strong> {{ order.paymentMethod.toUpperCase() }}</p>
-              <h4>Order Items:</h4>
-              <ul>
-              <li v-for="item in order.orderItems" :key="item._id">
-                  {{ item.productId.product_name }} - {{ item.productId.container_type }} - {{ item.quantity }} gallon(s) - ₱{{ formatPrice(item.price.$numberDecimal) }}
-              </li>
-              </ul>
-              <div class="col bg-secondary-field rounded-2 d-flex flex-column justify-content-center align-items-start">
-                  <label class="text-secondary-gray body-3 text-light-gray">Total</label>
-                  <h2 class="mb-0 mt-2">₱{{ formatPrice(order.total) }}</h2>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column">
+            <div class="bg-light p-3 rounded mb-4">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-secondary fw-semibold">Container Reuse Discount</span>
+                <h4 class="mb-0 text-muted fs-5">-₱{{ formatPrice(reuseDiscount) }}</h4>
               </div>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="text-secondary fw-bold">Total</span>
+                <h4 class="mb-0 text-primary fw-bold">₱{{ formatPrice(order.total) }}</h4>
+              </div>
+            </div>
           </div>
+          <div class="row g-2">
+            <div class="col-6">
+              <button 
+                type="button" 
+                class="btn btn-outline-success w-100 py-2"
+                @click="updateOrderStatus('Delivered')" 
+                :disabled="order.status !== 'In-transit'"
+              >
+                <i class="fa-solid fa-truck-check me-2"></i>Mark as Delivered
+              </button>
+            </div>
+            <div class="col-6">
+              <button 
+                type="button" 
+                class="btn btn-primary w-100 py-2" 
+                @click="updateOrderStatus('In-transit')" 
+                :disabled="order.status !== 'Pending'"
+              >
+                <i class="fa-solid fa-rotate me-2"></i>Update Status
+              </button>
+            </div>
           </div>
-          <div class="gap-2 d-flex justify-content-start align-items-center">
-                  <div class="col">
-                      <!-- Disable 'Mark as Delivered' if status is not 'In-transit' -->
-                      <button 
-                          type="button" 
-                          class="btn btn-primary btn-lg w-100"  
-                          @click="updateOrderStatus('Delivered')" 
-                          :disabled="order.status !== 'In-transit'"
-                      >
-                          Mark as Delivered
-                      </button>
-                  </div>
-                  <div class="col">
-                      <!-- Disable 'Update Status' if status is 'In-transit' or 'Delivered' -->
-                      <button 
-                          type="button" 
-                          class="btn bg-secondary-field text-light-gray btn-lg w-100" 
-                          @click="updateOrderStatus('In-transit')" 
-                          :disabled="order.status !== 'Pending'"
-                      >
-                          Update Status
-                      </button>
-                  </div>
-                  <div class="col">
-                      <button type="button" class="btn bg-secondary-field text-light-gray btn-lg w-100">Cancel</button>
-                  </div>
-          </div>
+        </div>
       </div>
   </div>
 </template>
@@ -75,7 +102,17 @@ import { formatPrice } from '@/utils/priceFormat';
       mounted() {
           this.fetchOrderDetails();
       },
-      
+      computed: {
+        reuseDiscount() {
+          return this.order.orderItems?.reduce((total, item) => {
+          if (item.gallonType?.toLowerCase() === 'refill') {
+            return total + (115 * item.quantity);
+          }
+          return total;
+        }, 0) || 0;
+        }
+      },
+
       methods: {
       async fetchOrderDetails() {
           try {
@@ -102,6 +139,15 @@ import { formatPrice } from '@/utils/priceFormat';
           if (response.data.success) {
             this.order = response.data.order;
             this.fetchOrderDetails()
+            Swal.fire({
+              toast: true,
+              position: 'top-end',
+              icon: 'success',
+              title: `Order status updated to "${newStatus}"`,
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+            });
           } else {
             this.errorMessage = 'Failed to update order status';
           }

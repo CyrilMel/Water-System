@@ -77,7 +77,7 @@ const fetchOrders = async () => {
       address: order.user?.address_id 
       ? `${order.user.address_id.street_no}, ${order.user.address_id.brgy}, ${order.user.address_id.city}`
       : 'No Address',
-      product: order.orderItems.map(i => i.productId.container_type).join(', '), // This assumes productId is the name or ID
+      product: order.orderItems.map(i => i.productId.product_name).join(', '), // This assumes productId is the name or ID
       quantity: order.orderItems.reduce((sum, i) => sum + i.quantity, 0),
       status: order.status,
     }));

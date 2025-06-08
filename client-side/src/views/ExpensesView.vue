@@ -1,52 +1,28 @@
 <template>
-  <div class="container">
-    <h1>Expense Tracker</h1>
-
-    <!-- Button to trigger modal -->
-    <div class="d-flex justify-content-center mb-4">
-      <button class="btn btn-primary" @click="showModal = true">Add New Expense</button>
+  <div class="page-container">
+    <div class="d-flex justify-content-start">
+      <h2 class="fw-bold">Expense Tracker</h2>
     </div>
 
-    <!-- Button to show monthly transactions -->
-    <div class="d-flex justify-content-center mb-4">
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="monthlyTransactionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          Monthly Transactions
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="monthlyTransactionsDropdown">
-          <li><a class="dropdown-item" href="#" @click="showMonthlyExpenses('May')">May 2025</a></li>
-          <li><a class="dropdown-item" href="#" @click="showMonthlyExpenses('June')">June 2025</a></li>
-          <li><a class="dropdown-item" href="#">July 2025</a></li>
-          <li><a class="dropdown-item" href="#">August 2025</a></li>
-        </ul>
+    <div class="table-card p-3">
+      <!-- Action Buttons -->
+      <div class="d-flex justify-content-end gap-2">
+        <button class="btn btn-primary" @click="openAddModal">Add New Expense</button>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="monthlyTransactionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Monthly Transactions
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="monthlyTransactionsDropdown">
+            <li><a class="dropdown-item" href="#" @click="showMonthlyExpenses('January')">January 2025</a></li>
+            <li><a class="dropdown-item" href="#" @click="showMonthlyExpenses('February')">February 2025</a></li>
+            <li><a class="dropdown-item" href="#" @click="showMonthlyExpenses('March')">March 2025</a></li>
+            <li><a class="dropdown-item" href="#" @click="showMonthlyExpenses('April')">April 2025</a></li>
+          </ul>
+        </div>
       </div>
-    </div>
 
-    <!-- Table for Today's Expenses -->
-    <h3 class="mb-3">Today's Expenses</h3>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">Description</th>
-          <th scope="col">Amount</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="expense in expensesToday" :key="expense.id">
-          <td>{{ expense.description }}</td>
-          <td>₱{{ expense.amount.toFixed(2) }}</td>
-          <td class="actions">
-            <button class="btn btn-warning" @click="editExpense(expense.id)">Edit</button>
-            <button class="btn btn-danger" @click="deleteExpense(expense.id)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Monthly Transactions (hidden initially) -->
-    <div v-show="monthlyTransactionsVisible">
-      <h3 class="mb-3">Monthly Tracker</h3>
+      <!-- Today's Expenses Table -->
+      <h3 class="mb-3">Today's Expenses</h3>
       <table class="table table-bordered">
         <thead>
           <tr>
@@ -56,7 +32,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="expense in monthlyExpenses" :key="expense.id">
+          <tr v-for="expense in expensesToday" :key="expense.id">
             <td>{{ expense.description }}</td>
             <td>₱{{ expense.amount.toFixed(2) }}</td>
             <td class="actions">
@@ -66,38 +42,61 @@
           </tr>
         </tbody>
       </table>
-    </div>
 
-    <!-- Modal for Adding Expense (using v-if to control visibility) -->
-    <div v-if="showModal" class="modal fade show" style="display: block;" @click.self="showModal = false">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Add New Expense</h5>
-            <button type="button" class="btn-close" @click="showModal = false"></button>
-          </div>
-          <div class="modal-body">
-            <form @submit.prevent="addExpense">
-              <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <input v-model="newExpense.description" type="text" class="form-control" id="description" required />
-              </div>
-              <div class="mb-3">
-                <label for="amount" class="form-label">Amount (₱)</label>
-                <input v-model.number="newExpense.amount" type="number" class="form-control" id="amount" required />
-              </div>
-              <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary">Add Expense</button>
-              </div>
-            </form>
+      <!-- Monthly Tracker Section -->
+      <div v-show="monthlyTransactionsVisible">
+        <h3 class="mb-3">{{ selectedMonth }} 2025 Expenses</h3>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Description</th>
+              <th scope="col">Amount</th>
+              <!-- <th scope="col">Actions</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="expense in monthlyExpenses" :key="expense.id">
+              <td>{{ expense.description }}</td>
+              <td>₱{{ expense.amount.toFixed(2) }}</td>
+              <!-- <td class="actions">
+                <button class="btn btn-warning" @click="editExpense(expense.id)">Edit</button>
+                <button class="btn btn-danger" @click="deleteExpense(expense.id)">Delete</button>
+              </td> -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Add Expense Modal -->
+      <div v-if="showModal" class="modal fade show" style="display: block;" @click.self="showModal = false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ isEditing ? 'Edit Expense' : 'Add New Expense' }}</h5>
+              <button type="button" class="btn-close" @click="showModal = false"></button>
+            </div>
+            <div class="modal-body">
+              <form @submit.prevent="addExpense">
+                <div class="mb-3">
+                  <label for="description" class="form-label">Description</label>
+                  <input v-model="newExpense.description" type="text" class="form-control" id="description" required />
+                </div>
+                <div class="mb-3">
+                  <label for="amount" class="form-label">Amount (₱)</label>
+                  <input v-model.number="newExpense.amount" type="number" class="form-control" id="amount" required />
+                </div>
+                <div class="d-flex justify-content-center">
+                  <button type="submit" class="btn btn-primary">Add Expense</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- Modal Backdrop -->
+      <div v-if="showModal" class="modal-backdrop fade show"></div>
     </div>
-
-    <!-- Modal Background (optional) -->
-    <div v-if="showModal" class="modal-backdrop fade show"></div>
-
   </div>
 </template>
 
@@ -106,67 +105,131 @@ export default {
   data() {
     return {
       showModal: false,
+      isEditing: false,
+      editingId: null,
+      selectedMonth: '',
       newExpense: {
         description: '',
         amount: 0,
       },
       expensesToday: [],
-      expensesMonthlyMay: [
-        { id: 1, description: "Expense 1", amount: 500 },
-        { id: 2, description: "Expense 2", amount: 1000 },
-        { id: 3, description: "Expense 3", amount: 1500 },
-      ],
       monthlyExpenses: [],
       monthlyTransactionsVisible: false,
     };
   },
   methods: {
+    // Open the modal to add a new expense
+    openAddModal() {
+      this.resetForm();
+      this.showModal = true;
+    },
+
+    // Add or update an expense
     addExpense() {
-      // Check if the description and amount are valid
       if (!this.newExpense.description || isNaN(this.newExpense.amount) || this.newExpense.amount <= 0) {
         alert('Please enter a valid description and amount.');
         return;
       }
 
-      // Create a new expense with a unique ID based on timestamp
-      const expense = { ...this.newExpense, id: Date.now() };
+      if (this.isEditing) {
+        // Update existing expense
+        const index = this.expensesToday.findIndex(exp => exp.id === this.editingId);
+        if (index !== -1) {
+          this.expensesToday[index] = {
+            id: this.editingId,
+            description: this.newExpense.description,
+            amount: this.newExpense.amount,
+          };
+        }
+      } else {
+        // Add new expense
+        const expense = { ...this.newExpense, id: Date.now() };
+        this.expensesToday.push(expense);
+      }
 
-      // Add the expense to the "Today" expenses array
-      this.expensesToday.push(expense);
+      // Save to localStorage
+      localStorage.setItem('expensesToday', JSON.stringify(this.expensesToday));
 
-      // Reset the input fields
-      this.newExpense.description = '';
-      this.newExpense.amount = 0;
-
-      // Close the modal
+      // Reset and close modal
+      this.resetForm();
       this.showModal = false;
     },
+
+    // Edit an existing expense
     editExpense(id) {
       const expense = this.expensesToday.find((exp) => exp.id === id);
       if (expense) {
         this.newExpense.description = expense.description;
         this.newExpense.amount = expense.amount;
+        this.editingId = id;
+        this.isEditing = true;
         this.showModal = true;
       }
     },
+
+    // Delete an expense
     deleteExpense(id) {
       this.expensesToday = this.expensesToday.filter((exp) => exp.id !== id);
+      localStorage.setItem('expensesToday', JSON.stringify(this.expensesToday));
     },
+
+    // Show expenses by month (static for Jan–Apr, dynamic for May)
     showMonthlyExpenses(month) {
+      this.selectedMonth = month;
       this.monthlyTransactionsVisible = true;
-      if (month === 'May') {
-        this.monthlyExpenses = this.expensesToday; // Use today's expenses for May
-      } else if (month === 'June') {
-        this.monthlyExpenses = [
-          { id: 4, description: "Expense A", amount: 200 },
-          { id: 5, description: "Expense B", amount: 400 },
-        ]; // Static expenses for June
-      }
+
+      const staticData = {
+        January: [
+          { id: 101, description: "Utilities Expense", amount: 1500 },
+          { id: 102, description: "Salaries Expense", amount: 1500 },
+          { id: 103, description: "Advertising Expense", amount: 500 },
+          { id: 104, description: "Repairs and Maintenance", amount: 1500 },
+          { id: 105, description: "Miscellaneous Expense", amount: 250 },
+        ],
+        February: [
+          { id: 201, description: "Utilities Expense", amount: 1850 },
+          { id: 202, description: "Salaries Expense", amount: 1500 },
+          { id: 203, description: "Advertising Expense", amount: 0 },
+          { id: 204, description: "Repairs and Maintenance", amount: 1000 },
+          { id: 205, description: "Repairs and Maintenance", amount: 100 },
+        ],
+        March: [
+          { id: 301, description: "Utilities Expense", amount: 1500 },
+          { id: 302, description: "Salaries Expense", amount: 1500 },
+          { id: 303, description: "Advertising Expense", amount: 0 },
+          { id: 304, description: "Repairs and Maintenance", amount: 1200 },
+          { id: 305, description: "Miscellaneous Expense", amount: 100 },
+        ],
+        April: [
+          { id: 401, description: "Utilities Expense", amount: 2000 },
+          { id: 402, description: "Salaries Expense", amount: 1500 },
+          { id: 403, description: "Advertising Expense", amount: 800 },
+          { id: 404, description: "Repairs and Maintenance", amount: 2500 },
+          { id: 405, description: "Miscellaneous Expense", amount: 500 },
+        ],
+        May: this.expensesToday,
+        // June: [
+        //   { id: 601, description: "Water Bill", amount: 500 },
+        //   { id: 602, description: "Transport", amount: 1500 },
+        // ],
+      };
+
+      this.monthlyExpenses = staticData[month] || [];
+    },
+
+    // Reset form fields
+    resetForm() {
+      this.newExpense = {
+        description: '',
+        amount: 0,
+      };
+      this.isEditing = false;
+      this.editingId = null;
     },
   },
   mounted() {
-    // Initialize with today's expenses if any
-    this.expensesToday = [];
+    const savedExpenses = localStorage.getItem('expensesToday');
+    this.expensesToday = savedExpenses ? JSON.parse(savedExpenses) : [];
   },
 };
 </script>

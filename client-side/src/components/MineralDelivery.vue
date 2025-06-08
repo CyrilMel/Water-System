@@ -8,7 +8,7 @@
           <img :src="product.product_image" alt="Product Image" class="product-image" />
         </div>
         <h5 class="product-name">{{ product.product_name }}</h5>
-        <p class="product-description">{{ product.container_type }}</p>
+        <p class="product-description">Container</p>
         <h6 class="product-price">₱{{ formatPrice(product.price.$numberDecimal) }}</h6>
         <div class="button-group">
           <!-- <router-link to="/checkout/cart" class="btn btn-primary">Buy Now</router-link> -->
@@ -53,6 +53,16 @@ export default {
       const product = this.productStore.products[index];
       if (product) {
         await this.cartStore.addToCart(product);
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: `${product.product_name} added to cart`,
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        });
+        
         this.$router.push('/checkout/cart'); // Redirect to cart page after adding to cart
         console.log('Product added to cart:', product);
       } else {

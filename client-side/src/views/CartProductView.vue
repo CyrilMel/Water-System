@@ -60,7 +60,7 @@
                     value="refill" 
                     class="form-check-input"
                     @change="updateGallonType(item.productId._id, item.gallonType)"
-                  > Refill (-₱40)
+                  > Refill (-₱115)
                 </label>
               </div>
             </div>
@@ -75,8 +75,8 @@
         <h4 class="mb-4">Order Summary</h4>
         <h5>Initial Delivery Charges</h5>
         <p>Subtotal: <span class="float-end">₱{{ subtotal }}</span></p>
-        <p>Delivery Fee: <span class="float-end">Free</span></p>
-        <p>Gallon Charges: <span class="float-end">₱{{ newGallonCharges }}</span></p>
+        <p>Container Reuse Discount: <span class="float-end">₱{{ newGallonCharges }}</span></p>
+        <p>Delivery: <span class="float-end">Free</span></p>
         <hr>
         <p class="fw-bold">Total Amount: <span class="float-end">₱{{ totalCost }}</span></p>
 
@@ -111,7 +111,7 @@ export default {
     newGallonCharges() {
       return this.cartItems.reduce((total, item) => {
         if (item.gallonType === 'refill') {
-          return total - 40 * item.quantity;
+          return total - 115 * item.quantity;
         }
         return total;
       }, 0).toFixed(2);
@@ -120,20 +120,13 @@ export default {
       return this.cartStore.cart ? this.cartStore.cart.items : [];
     },
     subtotal() {
-      return this.cartItems.reduce((total, item) => total + (item.quantity * this.getItemCost(item)), 0).toFixed(2);
+      return this.cartItems.reduce((total, item) => total + (item.quantity * this.cartStore.getTotalCost(item)), 0).toFixed(2);
     },
     totalCost() {
       return (parseFloat(this.subtotal)).toFixed(2); // Add the delivery fee
     }
   },
   methods: {
-    getItemCost(item) {
-      const price = item?.productId?.price?.$numberDecimal;
-      if (!price) return 0;
-      const baseCost = parseFloat(price);
-      return item.gallonType === 'refill' ? baseCost - 40 : baseCost;
-    },
-    
     async updateGallonType(productId, gallonType) {
       try {
         await this.cartStore.updateGallonType(productId, gallonType);
@@ -163,6 +156,15 @@ export default {
       const productId = this.cartItems[index].productId._id;
       await this.cartStore.removeFromCart(productId);
       await this.cartStore.fetchCart();
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Item removed from cart',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
     },
 
     updateCart(productId) {
