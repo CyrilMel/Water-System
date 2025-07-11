@@ -23,6 +23,7 @@
 import { useProductStore } from '@/stores/productStore';
 import { formatPrice } from '@/utils/priceFormat';
 import { useCartStore } from '@/stores/cart';
+import { useAuthStore } from '@/stores/auth';
 
 export default {
   data() {
@@ -30,6 +31,7 @@ export default {
       isVisible: false,
       productStore: useProductStore(),
       cartStore: useCartStore(),
+      authStore: useAuthStore(),
     };
   },
   computed: {
@@ -49,6 +51,15 @@ export default {
   },
   methods: {
     async addToCart(index) {
+      // Check if user is logged in
+      if (!this.authStore.isLoggedIn) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Please log in to add items to your cart.',
+          showConfirmButton: true,
+        });
+        return;
+      }
       // Match index from selectedProductData to full product
       const product = this.productStore.products[index];
       if (product) {
