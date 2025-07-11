@@ -17,7 +17,11 @@ const app = express();
 const PORT = process.env.PORT || 5000
 
 const __dirname = path.resolve();
-app.use(cors());
+
+app.use(cors({
+  origin: "https://shopaqua.onrender.com",
+  credentials: true,
+}));
 
 app.use(express.json());
 
