@@ -52,7 +52,7 @@ export default {
   methods: {
     async addToCart(index) {
       // Check if user is logged in
-      if (!this.authStore.isLoggedIn) {
+      if (!this.authStore.user) {
         Swal.fire({
           icon: 'warning',
           title: 'Please log in to add items to your cart.',
